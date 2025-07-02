@@ -1,43 +1,57 @@
 {% load crispy_forms_tags %}
 
 {% if formset %}
-  <div class="card border-light">
-    <div class="card-body">
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+        <i class="fas fa-search text-primary-600 mr-3" aria-hidden="true"></i> 
+        Search Results
+      </h3>
+    </div>
+    <div class="p-6">
       <form action="{% url 'add-publication' project_pk %}" method="post">
         {% csrf_token %}
-        <div class="table-responsive">
-          <table class="table table-sm table-hover">
-            <thead>
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
               <tr>
-                <th>
-                  <input type="checkbox" class="check" id="selectAll">
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <input type="checkbox" class="check rounded border-gray-300 text-primary-600 focus:ring-primary-500" id="selectAll">
                 </th>
-                <th scope="col">#</th>
-                <th scope="col">Publication</th>
-                <th scope="col">Unique ID</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Publication</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unique ID</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="bg-white divide-y divide-gray-200">
               {% for form in formset %}
-                <tr>
-                  <td>{{ form.selected }}</td>
-                  <td>{{ forloop.counter }}</td>
-                  <td>
-                    <strong>Title: </strong>{{ form.title.value }} <br>
-                    <strong>Author: </strong>{{ form.author.value }} <br> 
-                    <strong>Year: </strong>{{ form.year.value }} <br>
-                    <strong>Journal: </strong>{{ form.journal.value }}
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ form.selected }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ forloop.counter }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900">
+                    <div class="space-y-1">
+                      <div><strong class="text-gray-700">Title:</strong> {{ form.title.value }}</div>
+                      <div><strong class="text-gray-700">Author:</strong> {{ form.author.value }}</div>
+                      <div><strong class="text-gray-700">Year:</strong> {{ form.year.value }}</div>
+                      <div><strong class="text-gray-700">Journal:</strong> {{ form.journal.value }}</div>
+                    </div>
                   </td>
-                  <td class="text-nowrap">{{ form.unique_id.value }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ form.unique_id.value }}</td>
                 </tr>
               {% endfor %}
             </tbody>
           </table>
         </div>
         {{ formset.management_form }}
-        <div>
-          <button type="submit" class="btn btn-primary"><i class="fas fa-user-minus" aria-hidden="true"></i> Add Selected Publications to Project</button>
-          <a class="btn btn-secondary" href="{% url 'project-detail' project_pk %}" role="button"><i class="fas fa-long-arrow-left" aria-hidden="true"></i> Back to Project</a>
+        <div class="flex gap-3 mt-6">
+          <button type="submit" class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200">
+            <i class="fas fa-plus mr-2" aria-hidden="true"></i> 
+            Add Selected Publications to Project
+          </button>
+          <a class="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200" href="{% url 'project-detail' project_pk %}" role="button">
+            <i class="fas fa-arrow-left mr-2" aria-hidden="true"></i> 
+            Back to Project
+          </a>
           <input id="search_ids" type="hidden" name="search_ids" value="{{search_ids}}">
           <input id="pubs" type="hidden" name="pubs" value="{{pubs}}">
         </div>
@@ -45,9 +59,21 @@
     </div>
   </div>
 {% else %}
-  <a class="btn btn-secondary mb-3" href="{% url 'project-detail' project.pk %}" role="button"><i class="fas fa-long-arrow-left" aria-hidden="true"></i> Back to Project</a>
-  <div class="alert alert-info">
-    No users to remove!
+  <div class="mb-6">
+    <a class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200" href="{% url 'project-detail' project.pk %}" role="button">
+      <i class="fas fa-arrow-left mr-2" aria-hidden="true"></i> 
+      Back to Project
+    </a>
+  </div>
+  <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <i class="fas fa-info-circle text-blue-400" aria-hidden="true"></i>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-blue-700">No publications found!</p>
+      </div>
+    </div>
   </div>
 {% endif %}
 
