@@ -10,14 +10,31 @@ Add Allocation Notification
 
 
 {% block content %}
-<h2>Adding notification to {{allocation.get_parent_resource}} for PI {{ allocation.project.pi.first_name }}
-  {{ allocation.project.pi.last_name }} ({{ allocation.project.pi.username }})</h2>
+<div class="max-w-4xl mx-auto">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h2 class="text-3xl font-bold text-primary-950">Add Allocation Notification</h2>
+    <div class="mt-2 h-1 w-16 bg-secondary-500 rounded"></div>
+    <p class="mt-4 text-lg text-gray-600">
+      Adding notification to {{allocation.get_parent_resource}} for PI {{ allocation.project.pi.first_name }}
+      {{ allocation.project.pi.last_name }} ({{ allocation.project.pi.username }})
+    </p>
+  </div>
 
-<form method="post">
-  {% csrf_token %}
-  {{form |crispy}}
-  <input class="btn btn-success" type="submit" value="Add" />
-  <a class="btn btn-secondary" href="{% url 'allocation-detail' allocation.pk %}" role="button">Back to
-    Allocation</a><br>
-</form>
+  <div class="bg-white shadow-sm rounded-lg border border-gray-200 p-6">
+    <form method="post">
+      {% csrf_token %}
+      {{form |crispy}}
+      
+      <div class="flex gap-3 mt-6 pt-6 border-t border-gray-200">
+        <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+          Add
+        </button>
+        <a href="{% url 'allocation-detail' allocation.pk %}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
+          Back to Allocation
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
 {% endblock %}
