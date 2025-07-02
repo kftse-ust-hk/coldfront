@@ -3,103 +3,154 @@
 
 
 {% block content %}
-<div class="row">
+<!-- Welcome Section -->
+<div class="bg-gradient-to-r from-[#003974] to-[#002c5a] -mx-4 sm:-mx-6 lg:-mx-8 mb-8 -mt-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-16">
+    <div class="text-center">
+      <h1 class="text-3xl sm:text-4xl font-bold text-white mb-4">
+        Welcome back, {{ user.first_name|default:user.username }}!
+      </h1>
+      <p class="text-lg text-blue-100">
+        Manage your projects and allocations from your dashboard
+      </p>
+    </div>
+  </div>
+</div>
 
-  <div class="col-lg-6 mt-2">
-    <h2><a href="{% url 'project-list' %}">Projects &raquo;</a></h2>
-    <hr>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+  <!-- Projects Section -->
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold text-gray-900 flex items-center">
+        <i class="fas fa-folder text-secondary-950 mr-3"></i>
+        <a href="{% url 'project-list' %}" class="hover:text-secondary-950 transition duration-200">Projects</a>
+      </h2>
+      <a href="{% url 'project-list' %}" class="text-secondary-950 hover:text-secondary-800 font-medium flex items-center">
+        View All <i class="fas fa-arrow-right ml-1"></i>
+      </a>
+    </div>
 
     {% if project_list %}
-      <ul class="list-group">
+      <div class="space-y-3">
         {% for project in project_list %}
-          <li class="list-group-item">
-            <a href="{% url 'project-detail' project.pk %}"><i class="fa fa-folder fa-lg" aria-hidden="true"></i>{{project.title}}</a>
-            {% if project.needs_review %}
-              <a href="{% url 'project-review' project.pk %}"><span class="badge badge-warning">Needs Review</span></a>
-            {% endif %}
-          </li>
+          <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-200">
+            <div class="flex items-center justify-between">
+              <div class="flex-1">
+                <a href="{% url 'project-detail' project.pk %}" class="text-lg font-medium text-gray-900 hover:text-secondary-950 transition duration-200">
+                  {{ project.title }}
+                </a>
+              </div>
+              {% if project.needs_review %}
+                <a href="{% url 'project-review' project.pk %}" class="ml-3">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    Needs Review
+                  </span>
+                </a>
+              {% endif %}
+            </div>
+          </div>
         {% endfor %}
-      </ul>
+      </div>
     {% else %}
-      <div class="alert alert-info" role="alert"><i class="fa fa-info-circle" aria-hidden="true"></i> There are no projects to display.</div>
-      {% if user.userprofile.is_pi or user.is_superuser %}
-        <a class="btn btn-primary btn-block" href="{% url 'project-create' %}" role="button">Add a project</a>
-        <hr>
-      {% endif %}
+      <div class="text-center py-8">
+        <i class="fas fa-folder-open text-4xl text-gray-300 mb-4"></i>
+        <p class="text-gray-500 mb-4">No projects to display</p>
+        {% if user.userprofile.is_pi or user.is_superuser %}
+          <a href="{% url 'project-create' %}" class="inline-flex items-center px-4 py-2 bg-secondary-950 text-white font-medium rounded-lg hover:bg-secondary-800 transition duration-200">
+            <i class="fas fa-plus mr-2"></i>
+            Add a Project
+          </a>
+        {% endif %}
+      </div>
     {% endif %}
   </div>
 
-  <div class="col-lg-6 mt-2">
-    <h2><a href="{% url 'allocation-list' %}">Allocations &raquo;</a></h2>
-    <hr>
+  <!-- Allocations Section -->
+  <div class="bg-white rounded-lg shadow-lg p-6">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-2xl font-bold text-gray-900 flex items-center">
+        <i class="fas fa-server text-secondary-950 mr-3"></i>
+        <a href="{% url 'allocation-list' %}" class="hover:text-secondary-950 transition duration-200">Allocations</a>
+      </h2>
+      <a href="{% url 'allocation-list' %}" class="text-secondary-950 hover:text-secondary-800 font-medium flex items-center">
+        View All <i class="fas fa-arrow-right ml-1"></i>
+      </a>
+    </div>
 
     {% if allocation_list %}
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Project</th>
-            <th scope="col">Resource</th>
-            <th scope="col">Status</th>
-
-          </tr>
-        </thead>
-        <tbody>
-          {% for allocation in allocation_list %}
-          <tr>
-            <td>{{allocation.project.title}}</td>
-            <td>{{allocation.get_parent_resource}}
-              {% if allocation.get_parent_resource.get_ondemand_status == 'Yes' and ondemand_url %}
-              <a href = "{{ondemand_url}}"> {% load static %}  <img src="/static/core/portal/imgs/ondemand.png" alt="ondemand cta" width="25" height="25"></a>
-            {% endif %} 
-            </td>
-            {%  if allocation.status.name == "Expired" and allocation.expires_in < 0 %}
-            <td><a href="{% url 'allocation-detail' allocation.id %}" class="btn btn-danger btn-block">Expired</a></td>
-            {%  elif allocation.status.name == "Renewal Requested" %}
-            <td><a href="{% url 'allocation-detail' allocation.id %}" class="btn btn-danger btn-block">Renewal
-                Requested</a></td>
-            {%  elif allocation.expires_in >= 0 and  allocation.expires_in <= 30 %}
-            <td><a href="{% url 'allocation-detail' allocation.id %}" class="btn btn-danger btn-block">Expires in <span
-                  class="badge badge-light">{{allocation.expires_in}}</span> day{{allocation.expires_in|pluralize }}</a>
-            </td>
-            {% elif allocation.expires_in > 30 and allocation.expires_in <= 90 %}
-            <td><a href="{% url 'allocation-detail' allocation.id %}" class="btn btn-warning btn-block">Expires in <span
-                  class="badge badge-light">{{allocation.expires_in}}</span> day{{allocation.expires_in|pluralize }}</a>
-            </td>
-            {% elif allocation.status.name == "Pending" %}
-            <td><a href="{% url 'allocation-detail' allocation.id %}"
-                class="btn btn-info btn-block">{{allocation.status}}</a></td>
-            {% elif allocation.status.name == "Active" %}
-              {% if user_status|get_value_by_index:forloop.counter0 == 'PendingEULA' %}
-              <td><a href="{% url 'allocation-review-eula' allocation.pk %}" class="btn btn-info btn-block">Review and Accept EULA to Activate</a> </td>
-              {% else %}
-              <td><a href="{% url 'allocation-detail' allocation.id %}"
-                class="btn btn-success btn-block">{{allocation.status}}</a></td>
-              {% endif %}
-            {% else %}
-            <td><a href="{% url 'allocation-detail' allocation.id %}"
-                class="btn btn-info btn-block">{{allocation.status}}</a></td>
-            {% endif %}
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div class="space-y-3">
+        {% for allocation in allocation_list %}
+          <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition duration-200">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+              <div class="flex-1 mb-2 sm:mb-0">
+                <h3 class="font-medium text-gray-900">{{ allocation.project.title }}</h3>
+                <div class="flex items-center text-sm text-gray-500">
+                  <span>{{ allocation.get_parent_resource }}</span>
+                  {% if allocation.get_parent_resource.get_ondemand_status == 'Yes' and ondemand_url %}
+                    <a href="{{ ondemand_url }}" class="ml-2">
+                      {% load static %}
+                      <img src="/static/core/portal/imgs/ondemand.png" alt="OnDemand" class="w-5 h-5">
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
+              
+              <div class="flex-shrink-0">
+                {% if allocation.status.name == "Expired" and allocation.expires_in < 0 %}
+                  <a href="{% url 'allocation-detail' allocation.id %}" class="inline-flex items-center px-3 py-1.5 bg-red-100 text-red-800 text-sm font-medium rounded-full hover:bg-red-200 transition duration-200">
+                    Expired
+                  </a>
+                {% elif allocation.status.name == "Renewal Requested" %}
+                  <a href="{% url 'allocation-detail' allocation.id %}" class="inline-flex items-center px-3 py-1.5 bg-red-100 text-red-800 text-sm font-medium rounded-full hover:bg-red-200 transition duration-200">
+                    Renewal Requested
+                  </a>
+                {% elif allocation.expires_in >= 0 and allocation.expires_in <= 30 %}
+                  <a href="{% url 'allocation-detail' allocation.id %}" class="inline-flex items-center px-3 py-1.5 bg-red-100 text-red-800 text-sm font-medium rounded-full hover:bg-red-200 transition duration-200">
+                    Expires in {{ allocation.expires_in }} day{{ allocation.expires_in|pluralize }}
+                  </a>
+                {% elif allocation.expires_in > 30 and allocation.expires_in <= 90 %}
+                  <a href="{% url 'allocation-detail' allocation.id %}" class="inline-flex items-center px-3 py-1.5 bg-yellow-100 text-yellow-800 text-sm font-medium rounded-full hover:bg-yellow-200 transition duration-200">
+                    Expires in {{ allocation.expires_in }} day{{ allocation.expires_in|pluralize }}
+                  </a>
+                {% elif allocation.status.name == "Pending" %}
+                  <a href="{% url 'allocation-detail' allocation.id %}" class="inline-flex items-center px-3 py-1.5 bg-primary-100 text-primary-950 text-sm font-medium rounded-full hover:bg-primary-200 transition duration-200">
+                    {{ allocation.status }}
+                  </a>
+                {% elif allocation.status.name == "Active" %}
+                  {% if user_status|get_value_by_index:forloop.counter0 == 'PendingEULA' %}
+                    <a href="{% url 'allocation-review-eula' allocation.pk %}" class="inline-flex items-center px-3 py-1.5 bg-primary-100 text-primary-950 text-sm font-medium rounded-full hover:bg-primary-200 transition duration-200">
+                      Review EULA
+                    </a>
+                  {% else %}
+                    <a href="{% url 'allocation-detail' allocation.id %}" class="inline-flex items-center px-3 py-1.5 bg-green-100 text-green-800 text-sm font-medium rounded-full hover:bg-green-200 transition duration-200">
+                      {{ allocation.status }}
+                    </a>
+                  {% endif %}
+                {% else %}
+                  <a href="{% url 'allocation-detail' allocation.id %}" class="inline-flex items-center px-3 py-1.5 bg-primary-100 text-primary-950 text-sm font-medium rounded-full hover:bg-primary-200 transition duration-200">
+                    {{ allocation.status }}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
     {% else %}
-      <div class="alert alert-info" role="alert">
-        <i class="fa fa-info-circle" aria-hidden="true"></i> There are no allocations to display.
+      <div class="text-center py-8">
+        <i class="fas fa-server text-4xl text-gray-300 mb-4"></i>
+        <p class="text-gray-500">No allocations to display</p>
       </div>
     {% endif %}
   </div>
 </div>
-<div class="row">
+
+<!-- Extra App Templates -->
+<div class="mt-8">
   {% include "portal/extra_app_templates.html" %}
 </div>
 {% endblock %}
 
-
 {% block javascript %}
 {{ block.super }}
-<script>
-  $("#navbar-main > ul > li.active").removeClass("active");
-  $("#navbar-home").addClass("active");
-</script>
 {% endblock %}
