@@ -12,31 +12,34 @@ Allocation Invoice List
 <h2>Allocations that require payment</h2>
 
 {% if allocation_list %}
-  <div class="table-responsive">
-    <table class="table table-sm">
-      <thead>
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Resource</th>
-          <th scope="col">Status</th>
-          <th scope="col">PI</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resource</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PI</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="bg-white divide-y divide-gray-200">
         {% for allocation in allocation_list %}
-          <tr>
-            <td><a href="{% url 'allocation-invoice-detail' allocation.pk %}">{{allocation.pk}}</td>
-            <td>{{allocation.get_resources_as_string}}</td>
-            <td>{{allocation.status}}</td>
-            <td>{{allocation.project.pi.username }}</td>
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-600 hover:text-primary-900"><a href="{% url 'allocation-invoice-detail' allocation.pk %}">{{allocation.pk}}</a></td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{allocation.get_resources_as_string}}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{allocation.status}}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{allocation.project.pi.username }}</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 {% else %}
-  <div class="alert alert-info">
-    No allocations requiring payment!
+  <div class="bg-blue-50 border border-blue-200 rounded-md p-4">
+    <div class="flex">
+      <i class="fa fa-info-circle text-blue-400 mt-0.5 mr-3" aria-hidden="true"></i>
+      <div class="text-sm text-blue-700">No allocations requiring payment!</div>
+    </div>
   </div>
 {% endif %}
 {% endblock %}

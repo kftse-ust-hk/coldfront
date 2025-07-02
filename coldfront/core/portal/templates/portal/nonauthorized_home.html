@@ -1,31 +1,90 @@
 {% extends "common/base.html" %}
+
+<div class="relative bg-gradient-to-br from-[#003974] via-[#002c5a] to-[#001e40] overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8 -mt-10">
+  <div class="absolute inset-0 bg-black opacity-10"></div>
+  
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-32 pt-20 sm:pt-24 lg:pt-32"> "common/base.html" %}
 {% load common_tags %}
 
 
 {% block content %}
-<div class="row mt-4">
-  <div class="col mr-5">
-    <h2 class="text-center">Log In to ColdFront</h2>
-    <hr>
-
-    <p><a class="btn btn-primary btn-block" href="{% url 'login' %}" role="button"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Log In</a></p>
-
-    <div class="card bg-light">
-      <div class="card-body">
-        <h3 class="card-title h5">Do not have an Account?</h3>
-        <p class="card-text" style="text-align: justify;text-justify: inter-word;">{% settings_value 'ACCOUNT_CREATION_TEXT' %}</p>
+<!-- Hero Section -->
+<div class="relative bg-gradient-to-br from-[#003974] via-[#002c5a] to-[#001e40] overflow-hidden -mx-4 sm:-mx-6 lg:-mx-8 -mt-10">
+  <div class="absolute inset-0 bg-black opacity-10"></div>
+  
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-32 pt-28 sm:pt-32 lg:pt-40">
+    <div class="text-center">
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+        High-Performance Computing on Demand
+      </h1>
+      <p class="text-xl sm:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
+        Scalable cloud computing resources optimized for your most demanding workloads
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="{% url 'login' %}" class="inline-flex items-center px-8 py-4 bg-secondary-950 text-white font-semibold rounded-lg hover:bg-secondary-800 transition duration-200 shadow-lg">
+          <i class="fas fa-sign-in-alt mr-2" aria-hidden="true"></i>
+          Get Started
+        </a>
+        <a href="#learn-more" class="inline-flex items-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-primary-950 transition duration-200">
+          Learn More
+        </a>
       </div>
     </div>
   </div>
-  {% include "portal/extra_app_templates.html" %}
 </div>
-{% endblock %}
 
+<!-- Features Section -->
+<div id="learn-more" class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">Powerful Features</h2>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        Everything you need to manage and scale your computational research projects
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="text-center p-6">
+        <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-server text-2xl text-primary-950"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-3">High-Performance Resources</h3>
+        <p class="text-gray-600">Access cutting-edge computing clusters and storage systems optimized for research workloads.</p>
+      </div>
+      
+      <div class="text-center p-6">
+        <div class="w-16 h-16 bg-yellow-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-users text-2xl text-secondary-950"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-3">Collaborative Platform</h3>
+        <p class="text-gray-600">Manage projects, allocations, and team members through an intuitive web interface.</p>
+      </div>
+      
+      <div class="text-center p-6">
+        <div class="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-chart-line text-2xl text-green-600"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 mb-3">Usage Analytics</h3>
+        <p class="text-gray-600">Track resource usage, monitor allocations, and optimize your computational workflows.</p>
+      </div>
+    </div>
+  </div>
+</div>
 
-{% block javascript %}
-  {{ block.super }}
-  <script>
-    $("#navbar-main > ul > li.active").removeClass("active");
-    $("#navbar-home").addClass("active");
-  </script>
+<!-- Account Creation Section -->
+<div class="py-16 bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="bg-white rounded-xl shadow-lg p-8">
+      <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Need an Account?</h2>
+        <div class="prose prose-lg text-gray-600 max-w-none">
+          {% settings_value 'ACCOUNT_CREATION_TEXT' %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include "portal/extra_app_templates.html" %}
 {% endblock %}

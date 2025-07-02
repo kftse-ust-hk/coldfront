@@ -10,106 +10,209 @@ Project List
 
 
 {% block content %}
-<div class="card mb-3 bg-light">
-  <div class="card-body">
-    <div class="float-left">
-      <a class="btn btn-primary" href="{% url 'project-list' %}?{{filter_parameters}}" role="button"><i class="fas fa-arrow-left" aria-hidden="true"></i> Back to active projects</a>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <!-- Back to active projects -->
+  <div class="mb-6">
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <a href="{% url 'project-list' %}?{{filter_parameters}}" role="button" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+        <i class="fas fa-arrow-left mr-2" aria-hidden="true"></i>
+        Back to active projects
+      </a>
     </div>
   </div>
-</div>
 
-<h2>Archived Projects</h2>
-<hr>
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Archived Projects</h1>
+    <div class="mt-4 border-b border-gray-200"></div>
+  </div>
 
-{% if expand_accordion == "show" or project_list or user.is_superuser %}
-  <div class="mb-3" id="accordion">
-    <div class="card">
-      <div class="card-header">
-        <a id="expand_button" role="button" class="card-link " data-toggle="collapse" href="#collapseOne"> 
-          <i class="fas fa-filter" aria-hidden="true"></i> Filter
-          <i id="plus_minus" class="fas {{expand_accordion|get_icon}} float-right"></i>
-        </a>
-      </div>
-      <div id="collapseOne" class="collapse {{expand_accordion}}" data-parent="#accordion">
-        <div class="card-body">
-          <form id="filter_form" method="GET" action="{% url 'project-archived-list' %}">
-            {{ project_search_form|crispy }}
-            <input type="submit" class="btn btn-primary" value="Search">
-            <button id="form_reset_button" type="button" class="btn btn-secondary">Reset</button>
-          </form>
+  <!-- Filter Section -->
+  {% if expand_accordion == "show" or project_list or user.is_superuser %}
+    <div class="mb-6" id="accordion">
+      <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div class="border-b border-gray-200">
+          <button id="expand_button" type="button" 
+                  class="w-full px-6 py-4 text-left flex items-center justify-between text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" 
+                  aria-expanded="{% if expand_accordion == 'show' %}true{% else %}false{% endif %}">
+            <div class="flex items-center">
+              <i class="fas fa-filter text-blue-600 mr-3" aria-hidden="true"></i>
+              <span class="font-medium">Filter</span>
+            </div>
+            <i id="plus_minus" class="fas {{expand_accordion|get_icon}} text-gray-400 transition-transform duration-200"></i>
+          </button>
+        </div>
+        <div id="collapseOne" class="{% if expand_accordion == 'show' %}block{% else %}hidden{% endif %} transition-all duration-300 ease-in-out">
+          <div class="p-6 bg-gray-50">
+            <form id="filter_form" method="GET" action="{% url 'project-archived-list' %}">
+              {{ project_search_form|crispy }}
+              <div class="flex gap-3 mt-6">
+                <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                  <i class="fas fa-search mr-2" aria-hidden="true"></i>
+                  Search
+                </button>
+                <button id="form_reset_button" type="button" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
+                  <i class="fas fa-undo mr-2" aria-hidden="true"></i>
+                  Reset
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <hr>
-{% endif %}
+  {% endif %}
 
-{% if project_list %}
-  <strong>Projects: {{projects_count}}</strong>
-  <div class="table-responsive">
-    <table class="table table-sm">
-      <thead>
-        <tr>
-          <th scope="col" class="text-nowrap">
-            ID
-            <a href="?order_by=id&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort ID asc</span></a>
-            <a href="?order_by=id&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort ID desc</span></a>
-          </th>
-          <th scope="col" class="text-nowrap">
-            PI
-            <a href="?order_by=pi__username&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort PI asc</span></a>
-            <a href="?order_by=pi__username&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort PI desc</span></a>
-          </th>
-          <th scope="col">Title and Description</th>
-          <th scope="col" class="text-nowrap">
-            Field of Science
-            <a href="?order_by=field_of_science&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort Field of Science asc</span></a>
-            <a href="?order_by=field_of_science&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort Field of Science desc</span></a>
-          </th>
-          <th scope="col" class="text-nowrap">
-            Status
-            <a href="?order_by=status&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort Status asc</span></a>
-            <a href="?order_by=status&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort Status desc</span></a>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for project in project_list %}
-          <tr>
-            {% if project.project_code %}
-                <td><a href="/project/{{project.id}}/">{{ project.project_code }}</a></td>
-            {% else %}
-                <td><a href="/project/{{project.id}}/">{{ project.id }}</a></td>
-            {% endif %}
-            <td>{{ project.pi.username }}</td>
-            <td style="text-align: justify; text-justify: inter-word;"><strong>Title: </strong> {{ project.title }}
-              <br> <strong>Description: </strong>{{ project.description }}</td>
-            <td>{{ project.field_of_science.description }}</td>
-            <td>{{ project.status.name }}</td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    {% if is_paginated %} Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-      <ul class="pagination float-right mr-3">
-        {% if page_obj.has_previous %}
-          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{filter_parameters_with_order_by}}">Previous</a></li>
-        {% else %}
-          <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-        {% endif %}
-        {% if page_obj.has_next %}
-          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&{{filter_parameters_with_order_by}}">Next</a></li>
-        {% else %}
-          <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-        {% endif %}
-      </ul>
-    {% endif %}
-  </div>
-{% else %}
-  <div class="alert alert-info">
-    There are no archived projects!
-  </div>
-{% endif %}
+  <!-- Project List -->
+  {% if project_list %}
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+      <!-- Header -->
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">
+          Projects: <span class="text-blue-600">{{projects_count}}</span>
+        </h3>
+      </div>
+      
+      <!-- Table -->
+      <div class="overflow-x-auto">
+        <table class="w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                <div class="flex items-center space-x-1">
+                  <span>ID</span>
+                  <div class="flex flex-col">
+                    <a href="?order_by=id&direction=asc&{{filter_parameters}}" class="text-gray-400 hover:text-blue-600">
+                      <i class="fas fa-sort-up text-xs" aria-hidden="true"></i>
+                      <span class="sr-only">Sort ID asc</span>
+                    </a>
+                    <a href="?order_by=id&direction=des&{{filter_parameters}}" class="text-gray-400 hover:text-blue-600">
+                      <i class="fas fa-sort-down text-xs" aria-hidden="true"></i>
+                      <span class="sr-only">Sort ID desc</span>
+                    </a>
+                  </div>
+                </div>
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                <div class="flex items-center space-x-1">
+                  <span>PI</span>
+                  <div class="flex flex-col">
+                    <a href="?order_by=pi__username&direction=asc&{{filter_parameters}}" class="text-gray-400 hover:text-blue-600">
+                      <i class="fas fa-sort-up text-xs" aria-hidden="true"></i>
+                      <span class="sr-only">Sort PI asc</span>
+                    </a>
+                    <a href="?order_by=pi__username&direction=des&{{filter_parameters}}" class="text-gray-400 hover:text-blue-600">
+                      <i class="fas fa-sort-down text-xs" aria-hidden="true"></i>
+                      <span class="sr-only">Sort PI desc</span>
+                    </a>
+                  </div>
+                </div>
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title and Description</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                <div class="flex items-center space-x-1">
+                  <span>Field of Science</span>
+                  <div class="flex flex-col">
+                    <a href="?order_by=field_of_science&direction=asc&{{filter_parameters}}" class="text-gray-400 hover:text-blue-600">
+                      <i class="fas fa-sort-up text-xs" aria-hidden="true"></i>
+                      <span class="sr-only">Sort Field of Science asc</span>
+                    </a>
+                    <a href="?order_by=field_of_science&direction=des&{{filter_parameters}}" class="text-gray-400 hover:text-blue-600">
+                      <i class="fas fa-sort-down text-xs" aria-hidden="true"></i>
+                      <span class="sr-only">Sort Field of Science desc</span>
+                    </a>
+                  </div>
+                </div>
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                <div class="flex items-center space-x-1">
+                  <span>Status</span>
+                  <div class="flex flex-col">
+                    <a href="?order_by=status&direction=asc&{{filter_parameters}}" class="text-gray-400 hover:text-blue-600">
+                      <i class="fas fa-sort-up text-xs" aria-hidden="true"></i>
+                      <span class="sr-only">Sort Status asc</span>
+                    </a>
+                    <a href="?order_by=status&direction=des&{{filter_parameters}}" class="text-gray-400 hover:text-blue-600">
+                      <i class="fas fa-sort-down text-xs" aria-hidden="true"></i>
+                      <span class="sr-only">Sort Status desc</span>
+                    </a>
+                  </div>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {% for project in project_list %}
+              <tr class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 hover:text-blue-800">
+                  {% if project.project_code %}
+                    <a href="/project/{{project.id}}/">{{ project.project_code }}</a>
+                  {% else %}
+                    <a href="/project/{{project.id}}/">{{ project.id }}</a>
+                  {% endif %}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ project.pi.username }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900">
+                  <div class="space-y-1">
+                    <div><span class="font-semibold">Title:</span> {{ project.title }}</div>
+                    <div><span class="font-semibold">Description:</span> {{ project.description }}</div>
+                  </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ project.field_of_science.description }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                    {{ project.status.name }}
+                  </span>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Pagination -->
+      {% if is_paginated %}
+        <div class="px-6 py-4 border-t border-gray-200">
+          <div class="flex items-center justify-between">
+            <div class="text-sm text-gray-700">
+              Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </div>
+            <nav class="flex space-x-2">
+              {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}&{{filter_parameters_with_order_by}}" 
+                   class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                  Previous
+                </a>
+              {% else %}
+                <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-md cursor-not-allowed">
+                  Previous
+                </span>
+              {% endif %}
+              {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&{{filter_parameters_with_order_by}}" 
+                   class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                  Next
+                </a>
+              {% else %}
+                <span class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-300 rounded-md cursor-not-allowed">
+                  Next
+                </span>
+              {% endif %}
+            </nav>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+      <div class="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-blue-100 rounded-full">
+        <i class="fas fa-info-circle text-blue-600" aria-hidden="true"></i>
+      </div>
+      <h3 class="text-lg font-medium text-blue-800 mb-2">No Archived Projects</h3>
+      <p class="text-blue-700">There are no archived projects!</p>
+    </div>
+  {% endif %}
+</div>
 
 <script>
   $(document).on('click', '#form_reset_button', function() {
@@ -121,9 +224,23 @@ Project List
   };
 
   $("#expand_button").click(function() {
-    $('#collapseOne').collapse();
-    icon = $(this).find("i");
-    icon.toggleClass("fa-plus fa-minus");
+    const collapseDiv = document.getElementById('collapseOne');
+    const icon = document.getElementById('plus_minus');
+    const button = this;
+    
+    if (collapseDiv.classList.contains('hidden')) {
+      collapseDiv.classList.remove('hidden');
+      collapseDiv.classList.add('block');
+      icon.classList.remove('fa-plus');
+      icon.classList.add('fa-minus');
+      button.setAttribute('aria-expanded', 'true');
+    } else {
+      collapseDiv.classList.remove('block');
+      collapseDiv.classList.add('hidden');
+      icon.classList.remove('fa-minus');
+      icon.classList.add('fa-plus');
+      button.setAttribute('aria-expanded', 'false');
+    }
   });
 </script>
 {% endblock %}

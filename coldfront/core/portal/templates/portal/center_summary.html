@@ -11,81 +11,125 @@ Center Summary
 
 
 {% block content %}
-<h2>{% settings_value 'CENTER_NAME' %} Scientific Impact</h2>
-<hr>
+<div class="max-w-7xl mx-auto">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-primary-950">{% settings_value 'CENTER_NAME' %} Scientific Impact</h1>
+    <div class="mt-2 h-1 w-16 bg-secondary-500 rounded"></div>
+  </div>
 
-{% if settings.PUBLICATION_ENABLE %}
-<!-- Start  Publications -->
-<div class="card mb-3 border-primary">
-  <div class="card-header bg-primary text-white">
-    <i class="fas fa-newspaper" aria-hidden="true"></i> User Entered Publications
-  </div>
-  <div class="card-body">
-    <div id="chartPublications"></div>
-    <strong>Total Publications:</strong> {{total_publications_count}}
-  </div>
-</div>
-<!-- End Publications -->
-{% endif %}
+  <div class="space-y-6">
+    {% if settings.PUBLICATION_ENABLE %}
+    <!-- Publications Card -->
+    <div class="bg-white border border-primary-200 rounded-xl shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4">
+        <div class="flex items-center">
+          <i class="fas fa-newspaper text-white text-lg mr-3" aria-hidden="true"></i>
+          <h2 class="text-xl font-semibold text-white">User Entered Publications</h2>
+        </div>
+      </div>
+      <div class="p-6">
+        <div id="chartPublications" class="mb-4"></div>
+        <div class="text-lg font-semibold text-gray-900">
+          <span class="text-gray-600">Total Publications:</span> 
+          <span class="text-primary-600">{{total_publications_count}}</span>
+        </div>
+      </div>
+    </div>
+    {% endif %}
 
-{% if settings.RESEARCH_OUTPUT_ENABLE %}
-<!-- Start  Research Outputs -->
-<div class="card mb-3 border-primary">
-  <div class="card-header bg-primary text-white">
-    <i class="far fa-newspaper" aria-hidden="true"></i> User Entered Research Outputs
-  </div>
-  <div class="card-body">
-    <strong>Total Publications:</strong> {{total_research_outputs_count}}
-  </div>
-</div>
-<!-- End Research Outputs -->
-{% endif %}
+    {% if settings.RESEARCH_OUTPUT_ENABLE %}
+    <!-- Research Outputs Card -->
+    <div class="bg-white border border-primary-200 rounded-xl shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4">
+        <div class="flex items-center">
+          <i class="far fa-newspaper text-white text-lg mr-3" aria-hidden="true"></i>
+          <h2 class="text-xl font-semibold text-white">User Entered Research Outputs</h2>
+        </div>
+      </div>
+      <div class="p-6">
+        <div class="text-lg font-semibold text-gray-900">
+          <span class="text-gray-600">Total Research Outputs:</span> 
+          <span class="text-primary-600">{{total_research_outputs_count}}</span>
+        </div>
+      </div>
+    </div>
+    {% endif %}
 
-{% if settings.GRANT_ENABLE %}
-<!-- Start  Grants -->
-<div class="card mb-3 border-primary">
-  <div class="card-header bg-primary text-white">
-    <i class="fas fa-trophy" aria-hidden="true"></i> User Grants Summary
-  </div>
-  <div class="card-body">
-    <div id="chartGrants"></div>
-    <hr>
-    <strong> Grants Total:</strong> ${{grants_total}} <br>
-    <strong> Grants Total PI Only:</strong> ${{grants_total_pi_only}} <br>
-    <strong> Grants Total CoPI Only:</strong> ${{grants_total_copi_only}} <br>
-    <strong> Grants Total Senior Personnel Only:</strong> ${{grants_total_sp_only}}
-  </div>
-</div>
-<!-- End Grants -->
-{% endif %}
+    {% if settings.GRANT_ENABLE %}
+    <!-- Grants Card -->
+    <div class="bg-white border border-primary-200 rounded-xl shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4">
+        <div class="flex items-center">
+          <i class="fas fa-trophy text-white text-lg mr-3" aria-hidden="true"></i>
+          <h2 class="text-xl font-semibold text-white">User Grants Summary</h2>
+        </div>
+      </div>
+      <div class="p-6">
+        <div id="chartGrants" class="mb-6"></div>
+        <div class="border-t border-gray-200 pt-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="text-center">
+              <div class="text-sm text-gray-600 font-medium">Grants Total</div>
+              <div class="text-lg font-bold text-primary-600">${{grants_total}}</div>
+            </div>
+            <div class="text-center">
+              <div class="text-sm text-gray-600 font-medium">PI Only</div>
+              <div class="text-lg font-bold text-green-600">${{grants_total_pi_only}}</div>
+            </div>
+            <div class="text-center">
+              <div class="text-sm text-gray-600 font-medium">CoPI Only</div>
+              <div class="text-lg font-bold text-blue-600">${{grants_total_copi_only}}</div>
+            </div>
+            <div class="text-center">
+              <div class="text-sm text-gray-600 font-medium">Senior Personnel Only</div>
+              <div class="text-lg font-bold text-purple-600">${{grants_total_sp_only}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
 
-<!-- Start Allocation by Field of Science -->
-<div class="card mb-3 border-primary">
-  <div class="card-header bg-primary text-white">
-    <i class="fas fa-flask" aria-hidden="true"></i> Active Allocations and Users by Field of Science
-  </div>
-  <div id="allocation-by-fos" class="card-body">
-    <div class="text-center">
-      <button type="button" class="btn btn-primary"><i class="fas fa-sync fa-spin fa-fw" aria-hidden="true"></i> Getting Data <span
-          class="sr-only">...</span></button>
+    <!-- Allocation by Field of Science Card -->
+    <div class="bg-white border border-primary-200 rounded-xl shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4">
+        <div class="flex items-center">
+          <i class="fas fa-flask text-white text-lg mr-3" aria-hidden="true"></i>
+          <h2 class="text-xl font-semibold text-white">Active Allocations and Users by Field of Science</h2>
+        </div>
+      </div>
+      <div id="allocation-by-fos" class="p-6">
+        <div class="text-center">
+          <div class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg">
+            <i class="fas fa-sync fa-spin fa-fw mr-2" aria-hidden="true"></i>
+            Getting Data
+            <span class="sr-only">...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resources and Allocations Summary Card -->
+    <div class="bg-white border border-primary-200 rounded-xl shadow-sm overflow-hidden">
+      <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4">
+        <div class="flex items-center">
+          <i class="fas fa-trophy text-white text-lg mr-3" aria-hidden="true"></i>
+          <h2 class="text-xl font-semibold text-white">Resources and Allocations Summary</h2>
+        </div>
+      </div>
+      <div id="allocation-summary" class="p-6">
+        <div class="text-center">
+          <div class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg">
+            <i class="fas fa-sync fa-spin fa-fw mr-2" aria-hidden="true"></i>
+            Getting Data
+            <span class="sr-only">...</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-<!-- End Allocation by Field of Science -->
-
-<!-- Start Allocation Charts -->
-<div class="card mb-3 border-primary">
-  <div class="card-header bg-primary text-white">
-    <i class="fas fa-trophy"></i> Resources and Allocations Summary
-  </div>
-  <div id="allocation-summary" class="card-body">
-    <div class="text-center">
-      <button type="button" class="btn btn-primary"><i class="fas fa-sync fa-spin fa-fw" aria-hidden="true"></i> Getting Data <span
-          class="sr-only">...</span></button>
-    </div>
-  </div>
-</div>
-<!-- End Allocation Charts -->
 
 <script>
   $("#navbar-main > ul > li.active").removeClass("active")

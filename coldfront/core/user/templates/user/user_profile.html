@@ -6,60 +6,92 @@ User Profile{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif
 {% endblock %}
 
 {% block content %}
-<h2>User Profile</h2>
-<hr>
-
-<div class="card">
-  <div class="card-header">
-    <i class="fas fa-user" aria-hidden="true"></i>
-    {{ viewed_user.username }}
-    <div class="float-right">
-      <a class="btn btn-info" href="{% url 'user-projects-managers' viewed_user %}" role="button"><i class="far fa-user-circle" aria-hidden="true"></i> View user projects and managers</a>
-    </div>
+<div class="max-w-4xl mx-auto">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-primary-950">User Profile</h1>
+    <div class="mt-2 h-1 w-16 bg-secondary-500 rounded"></div>
   </div>
-  <div class="card-body">
-    <div class="card-title text-center h4">
-      {{viewed_user.first_name}} {{viewed_user.last_name}}
+
+  <div class="bg-white rounded-xl shadow-lg border border-gray-200">
+    <div class="bg-primary-950 text-white px-6 py-4 rounded-t-xl">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <i class="fas fa-user mr-3 text-lg" aria-hidden="true"></i>
+          <h2 class="text-xl font-semibold">{{ viewed_user.username }}</h2>
+        </div>
+        <a class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200" 
+           href="{% url 'user-projects-managers' viewed_user %}" role="button">
+          <i class="far fa-user-circle mr-2" aria-hidden="true"></i> 
+          View Projects & Managers
+        </a>
+      </div>
     </div>
-    <div class="table-responsive">
-      <table class="table">
-        <tbody>
-          {% block profile_contents %}
-            <tr>
-              <th scope="row" nowrap>University Role(s):</th>
-              <td>{{group_list}}</td>
-            </tr>
-            <tr>
-              <th scope="row">Email:</th>
-              <td>{{viewed_user.email}}</td>
-            </tr>
-            <tr>
-              <th scope="row">PI Status:</th>
-              <td>
-                {% if viewed_user.userprofile.is_pi %}
-                  <span class="badge badge-success"><i class="fas fa-check" aria-hidden="true"></i><span class="sr-only">Yes</span></span>
-                {% elif not user == viewed_user %}
-                  <span class="badge badge-danger"><i class="fas fa-times" aria-hidden="true"></i><span class="sr-only">No</span></span>
-                {% else %}
-                  <form class="form-inline" method="post" action="{% url 'user-upgrade' %}">
-                    <div class="form-group mb-2">
-                      <span class="badge badge-danger"><i class="fas fa-times" aria-hidden="true"></i><span class="sr-only">No</span></span>
+    
+    <div class="px-6 py-6">
+      <div class="text-center mb-6">
+        <h3 class="text-2xl font-semibold text-gray-900">
+          {{viewed_user.first_name}} {{viewed_user.last_name}}
+        </h3>
+      </div>
+      
+      <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 rounded-lg">
+        <table class="min-w-full divide-y divide-gray-300">
+          <tbody class="divide-y divide-gray-200 bg-white">
+            {% block profile_contents %}
+              <tr class="hover:bg-gray-50">
+                <th scope="row" class="px-6 py-4 text-sm font-medium text-gray-900 bg-gray-50 whitespace-nowrap">
+                  University Role(s):
+                </th>
+                <td class="px-6 py-4 text-sm text-gray-700">{{group_list}}</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th scope="row" class="px-6 py-4 text-sm font-medium text-gray-900 bg-gray-50">
+                  Email:
+                </th>
+                <td class="px-6 py-4 text-sm text-gray-700">{{viewed_user.email}}</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th scope="row" class="px-6 py-4 text-sm font-medium text-gray-900 bg-gray-50">
+                  PI Status:
+                </th>
+                <td class="px-6 py-4 text-sm text-gray-700">
+                  {% if viewed_user.userprofile.is_pi %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <i class="fas fa-check mr-1" aria-hidden="true"></i>
+                      <span class="sr-only">Yes</span>Active PI
+                    </span>
+                  {% elif not user == viewed_user %}
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                      <i class="fas fa-times mr-1" aria-hidden="true"></i>
+                      <span class="sr-only">No</span>Not PI
+                    </span>
+                  {% else %}
+                    <div class="flex items-center space-x-3">
+                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        <i class="fas fa-times mr-1" aria-hidden="true"></i>
+                        <span class="sr-only">No</span>Not PI
+                      </span>
+                      <form method="post" action="{% url 'user-upgrade' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-secondary-600 hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-500 transition-colors duration-200">
+                          <i class="fas fa-chevron-circle-up mr-1" aria-hidden="true"></i> 
+                          Upgrade Account
+                        </button>
+                      </form>
                     </div>
-                    <div class="form-group mx-sm-3 mb-2">
-                      {% csrf_token %}
-                      <button class="btn btn-secondary" type="submit"><i class="fas fa-chevron-circle-up" aria-hidden="true"></i> Upgrade Account</button>
-                    </div>
-                  </form>
-                {% endif %}
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">Last Login:</th>
-              <td>{{viewed_user.last_login}}</td>
-            </tr>
-          {% endblock %}
-        </tbody>
-      </table>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th scope="row" class="px-6 py-4 text-sm font-medium text-gray-900 bg-gray-50">
+                  Last Login:
+                </th>
+                <td class="px-6 py-4 text-sm text-gray-700">{{viewed_user.last_login}}</td>
+              </tr>
+            {% endblock %}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

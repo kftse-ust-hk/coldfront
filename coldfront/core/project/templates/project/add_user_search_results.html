@@ -2,75 +2,100 @@
 
 <form action="{% url 'project-add-users' pk %}" method="post">
   {% csrf_token %}
-  <div class="mb-3">
+  
+  <div class="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
     {% if number_of_usernames_found %}
-      <strong>Found {{number_of_usernames_found}} of
-      {{number_of_usernames_searched}} usernames searched.</strong>
+      <p class="font-semibold text-blue-800">
+        Found {{number_of_usernames_found}} of {{number_of_usernames_searched}} usernames searched.
+      </p>
     {% elif matches %}
-      <strong>Found {{matches|length}} match{{matches|length|pluralize}}.</strong>
+      <p class="font-semibold text-blue-800">
+        Found {{matches|length}} match{{matches|length|pluralize}}.
+      </p>
     {% endif %}
-    <br>
+    
     {% if usernames_not_found %}
-      Username{{usernames_not_found|length|pluralize}} missing from database
-      {{usernames_not_found|length|pluralize:"is, are"}}: {{ usernames_not_found|join:", " }}.
+      <p class="text-amber-700 mt-2">
+        Username{{usernames_not_found|length|pluralize}} missing from database
+        {{usernames_not_found|length|pluralize:"is, are"}}: 
+        <span class="font-medium">{{ usernames_not_found|join:", " }}</span>
+      </p>
     {% endif %}
-    <br>
-    {% if users_already_in_project %} The following
-      user{{users_already_in_project|length|pluralize}}
-      {{users_already_in_project|length|pluralize:"is, are"}} already in project:
-      {{users_already_in_project|join:", "}}
+    
+    {% if users_already_in_project %}
+      <p class="text-amber-700 mt-2">
+        The following user{{users_already_in_project|length|pluralize}}
+        {{users_already_in_project|length|pluralize:"is, are"}} already in project:
+        <span class="font-medium">{{users_already_in_project|join:", "}}</span>
+      </p>
     {% endif %}
   </div>
 
   {% if matches %}
-    <div class="card bg-light mb-3 {{div_allocation_class}}">
-      <div class="card-header">Available Allocations</div>
-      <div class="card-body">
+    <div class="bg-blue-50 border border-blue-200 rounded-lg mb-6 {{div_allocation_class}}">
+      <div class="px-6 py-4 border-b border-blue-200 bg-blue-100 rounded-t-lg">
+        <h3 class="text-lg font-semibold text-blue-900">Available Allocations</h3>
+      </div>
+      <div class="p-6">
         {{allocation_form|crispy}}
       </div>
     </div>
 
-    <div class="table-responsive">
-      <table class="table table-sm table-hover">
-        <thead>
-          <tr>
-            <th><input type="checkbox" class="check" id="selectAll"></th>
-            <th scope="col">#</th>
-            <th scope="col">Username</th>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Role</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for form in formset %}
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
             <tr>
-              <td>{{ form.selected }}</td>
-              <td>{{ forloop.counter }}</td>
-              <td>{{ form.username.value }}</td>
-              <td>{{ form.first_name.value }}</td>
-              <td>{{ form.last_name.value }}</td>
-              <td>{{ form.email.value }}</td>
-              <td>{{ form.role }}</td>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <input type="checkbox" class="check rounded text-blue-600 focus:ring-blue-500 focus:ring-2" id="selectAll">
+              </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">First Name</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Name</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {% for form in formset %}
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm">{{ form.selected }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{{ forloop.counter }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{{ form.username.value }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ form.first_name.value }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ form.last_name.value }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ form.email.value }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">{{ form.role }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
     {{ formset.management_form }}
 
     <input id="q" type="hidden" name="q" value="{{user_search_string}}">
     <input id="search_by" type="hidden" name="search_by" value="{{search_by}}">
-    <div class="mb-3">
+    
+    <div class="mt-6 flex flex-col sm:flex-row gap-3">
       {% if matches %}
-        <button type="submit" class="btn btn-primary"><i class="fas fa-user-plus" aria-hidden="true"></i> Add Selected Users to Project</button>
+        <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+          <i class="fas fa-user-plus mr-2" aria-hidden="true"></i>
+          Add Selected Users to Project
+        </button>
       {% endif %}
-      <a class="btn btn-secondary" href="{% url 'project-detail' pk %}" role="button">Back to Project</a><br>
+      <a href="{% url 'project-detail' pk %}" role="button" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
+        Back to Project
+      </a>
     </div>
   {% else %}
-    <div class="alert alert-info text-center">
-      No results!
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+      <div class="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-blue-100 rounded-full">
+        <i class="fas fa-info-circle text-blue-600" aria-hidden="true"></i>
+      </div>
+      <h3 class="text-lg font-medium text-blue-800 mb-2">No Results</h3>
+      <p class="text-blue-700">No results found!</p>
     </div>
   {% endif %}
 </form>
@@ -95,6 +120,7 @@
     var id = $(this).attr('id');
     if ( id != "id_allocationform-allocation_0") {
       $("#id_allocationform-allocation_0").prop('checked', false);
+    }
   });
 </script>
 
