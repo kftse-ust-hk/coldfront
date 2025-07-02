@@ -10,13 +10,32 @@ Add Resource Attribute
 
 
 {% block content %}
-<h2>Adding resource attribute to {{resource}}</h2>
+<div class="max-w-4xl mx-auto">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-primary-950">Add Resource Attribute</h1>
+    <div class="mt-2 h-1 w-16 bg-secondary-500 rounded"></div>
+    <p class="mt-4 text-lg text-gray-600">To resource: {{resource}}</p>
+  </div>
 
-<form method="post">
-  {% csrf_token %}
-  {{form |crispy}}
-  <input class="btn btn-success" type="submit" value="Add" />
-  <a class="btn btn-secondary" href="{% url 'resource-detail' resource.pk %}" role="button">Back to
-    Resource</a><br>
-</form>
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div class="p-6">
+      <form method="post">
+        {% csrf_token %}
+        {{form |crispy}}
+        <div class="flex gap-3 mt-6 pt-6 border-t border-gray-200">
+          <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+            <i class="fas fa-plus mr-2" aria-hidden="true"></i>
+            Add
+          </button>
+          <a class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200" 
+             href="{% url 'resource-detail' resource.pk %}" role="button">
+            <i class="fas fa-arrow-left mr-2" aria-hidden="true"></i>
+            Back to Resource
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}
