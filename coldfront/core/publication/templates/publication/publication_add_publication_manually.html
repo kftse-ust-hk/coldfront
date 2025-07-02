@@ -9,39 +9,59 @@ Add Publication to Project Manually
 
 
 {% block content %}
-<h2>Add publication to project: {{project.title}}</h2> <hr>
-
-{% if form.non_field_errors %}
-  <div class="alert alert-danger" role="alert">
-    {{ form.non_field_errors }}
+<div class="max-w-4xl mx-auto">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-primary-950">Add Publication Manually</h1>
+    <div class="mt-2 h-1 w-16 bg-secondary-500 rounded"></div>
+    <p class="mt-4 text-lg text-gray-600">To project: {{project.title}}</p>
   </div>
-{% endif %}
 
-<div class="row">
-  <div class="col">
-    <form method="post">
-      {% csrf_token %}
-      {{ form|crispy }}
-      <div>
-        <button type="submit" class="btn btn-primary"><i class="fas fa-plus" aria-hidden="true"></i> Add Publication</button>
+  <!-- Error Messages -->
+  {% if form.non_field_errors %}
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <i class="fas fa-exclamation-triangle text-red-600" aria-hidden="true"></i>
+        </div>
+        <div class="ml-3">
+          <div class="text-sm text-red-700">
+            {{ form.non_field_errors }}
+          </div>
+        </div>
       </div>
-    </form>
+    </div>
+  {% endif %}
+
+  <!-- Publication Form -->
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm mb-6">
+    <div class="p-6">
+      <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="mt-6 pt-6 border-t border-gray-200">
+          <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200">
+            <i class="fas fa-plus mr-2" aria-hidden="true"></i> 
+            Add Publication
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 
-<br/>
-
-<div class="row">
-  <div class="col">
-    <div class="card border-light">
-      <div class="card-body">
-        <a class="btn btn-info" href="{% url 'publication-search' project.pk %}" role="button">
-          <i class="fas fa-search" aria-hidden="true"></i> Back to Search
-        </a>
-        <a class="btn btn-secondary" href="{% url 'project-detail' project.pk %}" role="button">
-          <i class="fas fa-long-arrow-left" aria-hidden="true"></i> Back to Project
-        </a>
-      </div>
+  <!-- Navigation -->
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div class="p-6">
+      <a class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200" 
+         href="{% url 'publication-search' project.pk %}" role="button">
+        <i class="fas fa-search mr-2" aria-hidden="true"></i> 
+        Back to Search
+      </a>
+      <a class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200" 
+         href="{% url 'project-detail' project.pk %}" role="button">
+        <i class="fas fa-long-arrow-left mr-2" aria-hidden="true"></i> 
+        Back to Project
+      </a>
     </div>
   </div>
 </div>
