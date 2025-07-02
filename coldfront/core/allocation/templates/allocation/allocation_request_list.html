@@ -10,54 +10,70 @@ Allocation Review New and Pending Requests
 
 
 {% block content %}
-<h2>Allocation Requests</h2>
+<div class="max-w-7xl mx-auto">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h2 class="text-3xl font-bold text-primary-950">Allocation Requests</h2>
+    <div class="mt-2 h-1 w-16 bg-secondary-500 rounded"></div>
+  </div>
 
-<hr>
+  <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6 space-y-4">
+    <p class="text-blue-700 text-justify"> 
+      For each allocation request below, there is the option to activate the allocation request and to view the allocation's detail page.
+    </p>
 
-<p class="text-justify"> 
-  For each allocation request below, there is the option to activate the allocation request and to view the allocation's detail page.
-</p>
-
-<p class="text-justify"> 
-  By default, activating an allocation will make it active for {{ ALLOCATION_DEFAULT_ALLOCATION_LENGTH }} days.
-</p>
+    <p class="text-blue-700 text-justify"> 
+      By default, activating an allocation will make it active for {{ ALLOCATION_DEFAULT_ALLOCATION_LENGTH }} days.
+    </p>
+  </div>
 
 {% if allocation_list %}
-  <div class="table-responsive">
-    <table class="table table-sm">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Requested</th>
-          <th scope="col">Project Title</th>
-          <th scope="col">PI</th>
-          <th scope="col">Resource</th>
-          {% if PROJECT_ENABLE_PROJECT_REVIEW %}
-            <th scope="col" class="text-nowrap">Project Review Status</th>
-          {% endif %}
-          <th scope="col">Status</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for allocation in allocation_list %}
+  <div class="bg-white shadow-sm rounded-lg border border-gray-200">
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
           <tr>
-            <td>{{allocation.pk}}</td>
-            <td>{{allocation_renewal_dates|get_value_from_dict:allocation.pk|default:allocation.created|date:"M. d, Y"}}</td>
-            <td><a href="{% url 'project-detail' allocation.project.pk %}">{{allocation.project.title|truncatechars:50}}</a></td>
-            <td>{{allocation.project.pi.first_name}} {{allocation.project.pi.last_name}}
-              ({{allocation.project.pi.username}})</td>
-            <td>{{allocation.get_parent_resource}}</td>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requested</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project Title</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PI</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resource</th>
             {% if PROJECT_ENABLE_PROJECT_REVIEW %}
-              <td class="text-center">{{allocation.project|convert_status_to_icon}}</td>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Project Review Status</th>
             {% endif %}
-            <td>{{allocation.status}}</td>
-            <td class="text-nowrap">
-                <form method="post" action="{% url 'allocation-detail' allocation.pk %}">
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          {% for allocation in allocation_list %}
+            <tr class="hover:bg-gray-50 transition-colors duration-150">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{allocation.pk}}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{allocation_renewal_dates|get_value_from_dict:allocation.pk|default:allocation.created|date:"M. d, Y"}}</td>
+              <td class="px-6 py-4 text-sm text-gray-900">
+                <a href="{% url 'project-detail' allocation.project.pk %}" class="text-primary-600 hover:text-primary-800 font-medium">
+                  {{allocation.project.title|truncatechars:50}}
+                </a>
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-900">
+                {{allocation.project.pi.first_name}} {{allocation.project.pi.last_name}}
+                ({{allocation.project.pi.username}})
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{allocation.get_parent_resource}}</td>
+            {% if PROJECT_ENABLE_PROJECT_REVIEW %}
+              <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{allocation.project|convert_status_to_icon}}</td>
+            {% endif %}
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{allocation.status}}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
+                <form method="post" action="{% url 'allocation-detail' allocation.pk %}" class="inline-flex gap-2">
                   {% csrf_token %}
                   <input type="hidden" name="status" value="{{ allocation_status_active.id }}" />
-                  <button type="submit" name="action" value="auto-approve" class="btn btn-success mr-1{% if allocation.get_information == '' %} confirm-activate{% endif %}">Approve</button>
-                  <a href="{% url 'allocation-detail' allocation.pk %}" class="btn btn-primary mr-1">Details</a>
+                  <button type="submit" name="action" value="auto-approve" class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200{% if allocation.get_information == '' %} confirm-activate{% endif %}">
+                    Approve
+                  </button>
+                  <a href="{% url 'allocation-detail' allocation.pk %}" class="inline-flex items-center px-3 py-1.5 bg-primary-600 text-white text-sm rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200">
+                    Details
+                  </a>
                 </form>
             </td>
           </tr>
@@ -65,10 +81,16 @@ Allocation Review New and Pending Requests
       </tbody>
     </table>
   </div>
+</div>
 {% else %}
-  <div class="alert alert-info">
-    No new or pending allocation requests!
+  <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+    <div class="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-blue-100 rounded-full">
+      <i class="fas fa-info-circle text-blue-600" aria-hidden="true"></i>
+    </div>
+    <h3 class="text-lg font-medium text-blue-800 mb-2">No Allocation Requests</h3>
+    <p class="text-blue-700">No new or pending allocation requests!</p>
   </div>
+</div>
 {% endif %}
 
 <script>
