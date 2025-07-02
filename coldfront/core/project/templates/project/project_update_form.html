@@ -9,12 +9,28 @@ Update Project
 
 
 {% block content %}
-<form method="post">
-  {% csrf_token %}
-  {{ form|crispy }}
-  <input class="btn btn-primary" type="submit" value="Save" />
-  <a class="btn btn-secondary" href="{% url 'project-detail' object.pk %}" role="button">Cancel</a>
-</form>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Update Project</h1>
+    <div class="mt-4 border-b border-gray-200"></div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <form method="post">
+      {% csrf_token %}
+      {{ form|crispy }}
+      
+      <div class="mt-8 flex flex-col sm:flex-row gap-3">
+        <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+          Save
+        </button>
+        <a href="{% url 'project-detail' object.pk %}" role="button" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
 
 <script>
   $(document).ready(function() {
