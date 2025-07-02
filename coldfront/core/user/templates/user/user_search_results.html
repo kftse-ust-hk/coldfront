@@ -1,39 +1,58 @@
 
 {% if matches %}
   {% if number_of_usernames_found %}
-    <strong>Found {{number_of_usernames_found}} of {{number_of_usernames_searched}} usernames searched.</strong> 
+    <div class="mb-4">
+      <p class="text-sm font-medium text-gray-700">
+        Found <span class="font-semibold text-primary-600">{{number_of_usernames_found}}</span> of <span class="font-semibold">{{number_of_usernames_searched}}</span> usernames searched.
+      </p>
+    </div>
   {% endif %}
   {% if usernames_not_found %}
-    The missing username{{usernames_not_found|length|pluralize}} {{usernames_not_found|length|pluralize:"is, are"}}: {{ usernames_not_found|join:", " }}.
+    <div class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+      <p class="text-sm text-yellow-800">
+        The missing username{{usernames_not_found|length|pluralize}} {{usernames_not_found|length|pluralize:"is, are"}}: {{ usernames_not_found|join:", " }}.
+      </p>
+    </div>
   {% endif %}
-  <div class="table-responsive">
-    <table class="table">
-      <thead>
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">Username</th>
-          <th scope="col">First Name</th>
-          <th scope="col">Last Name</th>
-          <th scope="col">Email</th>
-          <th scope="col">Source</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">First Name</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Name</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="bg-white divide-y divide-gray-200">
         {% for user in matches %}
-          <tr>
-            <td>{{ forloop.counter }}</td>
-            <td><a href="{% url 'user-profile' user.username %}">{{ user.username }}</a></td>
-            <td>{{ user.first_name }}</td>
-            <td>{{ user.last_name }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.source }}</td>
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ forloop.counter }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <a href="{% url 'user-profile' user.username %}" class="text-primary-600 hover:text-primary-900">{{ user.username }}</a>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.first_name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.last_name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.email }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ user.source }}</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 {% else %}
-  <div class="alert alert-info text-center">
-    No results!
+  <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
+    <div class="flex justify-center">
+      <div class="flex">
+        <div class="flex-shrink-0">
+          <i class="fas fa-info-circle text-blue-400" aria-hidden="true"></i>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm text-blue-700">No results!</p>
+        </div>
+      </div>
+    </div>
   </div>
 {% endif %}

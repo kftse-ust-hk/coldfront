@@ -4,21 +4,33 @@
 
 
 {% block content %}
-<div class="row">
-  <div class="col">
-    <form method="post" action="/search-ldap" id="post-form">
-    {% csrf_token %}
-    {{ user_search_form|crispy }}
-    <button id="search-button" type="submit" class="btn btn-success btn-block"><i class="fas fa-search" aria-hidden="true"></i> Search</button>
-    </form>
+<div class="max-w-7xl mx-auto">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-primary-950">User Search</h1>
+    <div class="mt-2 h-1 w-16 bg-secondary-500 rounded"></div>
   </div>
-</div>
 
-<br>
+  <!-- Search Form -->
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm mb-6">
+    <div class="p-6">
+      <form method="post" action="/search-ldap" id="post-form">
+      {% csrf_token %}
+      {{ user_search_form|crispy }}
+      <button id="search-button" type="submit" class="w-full inline-flex justify-center items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+        <i class="fas fa-search mr-2" aria-hidden="true"></i> Search
+      </button>
+      </form>
+    </div>
+  </div>
 
-<div class="row">
-  <div class="col" id="search_results">
-    <div id="search_results_inner"></div>
+  <!-- Search Results -->
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div class="p-6">
+      <div id="search_results">
+        <div id="search_results_inner"></div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -33,7 +45,7 @@
 
   $('#post-form').on('submit', function(event){
     event.preventDefault();
-    $("#search_results_inner").html('<div class="alert alert-info text-center"><i class="fas fa-sync fa-spin fa-fw" aria-hidden="true"></i> Searching</div>')
+    $("#search_results_inner").html('<div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center"><div class="inline-flex items-center"><i class="fas fa-sync fa-spin fa-fw text-blue-600 mr-2" aria-hidden="true"></i><span class="text-blue-800">Searching...</span></div></div>')
     create_post();
   });
 
@@ -65,10 +77,9 @@
         // handle a non-successful response
         error : function(xhr,errmsg,err) {
           if(xhr.status == 403 || xhr.status == 401) {
-            $('#search_results_inner').html("<div class='alert alert-danger'>Your session expired. Please login again. <a href='#' class='close'>&times;</a></div>");
+            $('#search_results_inner').html("<div class='bg-red-50 border border-red-200 rounded-lg p-4'><div class='flex'><div class='flex-shrink-0'><i class='fas fa-exclamation-triangle text-red-400' aria-hidden='true'></i></div><div class='ml-3'><p class='text-sm text-red-800'>Your session expired. Please login again.</p></div><div class='ml-auto pl-3'><div class='-mx-1.5 -my-1.5'><button type='button' class='close inline-flex bg-red-50 rounded-md p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-50 focus:ring-red-600'><span class='sr-only'>Dismiss</span><i class='fas fa-times h-4 w-4' aria-hidden='true'></i></button></div></div></div></div>");
           } else {
-            $('#search_results_inner').html("<div class='alert alert-danger'>Oops! We have encountered an error: "+errmsg+
-                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            $('#search_results_inner').html("<div class='bg-red-50 border border-red-200 rounded-lg p-4'><div class='flex'><div class='flex-shrink-0'><i class='fas fa-exclamation-triangle text-red-400' aria-hidden='true'></i></div><div class='ml-3'><p class='text-sm text-red-800'>Oops! We have encountered an error: "+errmsg+"</p></div><div class='ml-auto pl-3'><div class='-mx-1.5 -my-1.5'><button type='button' class='close inline-flex bg-red-50 rounded-md p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-red-50 focus:ring-red-600'><span class='sr-only'>Dismiss</span><i class='fas fa-times h-4 w-4' aria-hidden='true'></i></button></div></div></div></div>");
           }
           console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
         }
@@ -77,6 +88,11 @@
 
   $(document).ready(function(){
       $('[data-toggle="popover"]').popover();
+      
+      // Handle close button clicks for alerts
+      $(document).on('click', '.close', function() {
+        $(this).closest('div[class*="bg-red-50"]').fadeOut();
+      });
   });
 </script>
 {% endblock %}
