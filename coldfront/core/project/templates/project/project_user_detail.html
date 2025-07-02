@@ -9,73 +9,91 @@ Project User Detail
 
 
 {% block content %}
-<h2>Project User Detail</h2>
-
-<h3>Project: {{project.title}}</h3>
-<hr>
-
-<form action="{% url 'project-user-detail' project_obj.pk project_user_obj.pk %}" method="post">
-  {% csrf_token %}
-  <div class="card">
-    <div class="card-header"><i class="fas fa-user" aria-hidden="true"></i> User Detail</div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table">
-          <tr>
-            <th scope="row">Username:</th>
-            <td>{{project_user_obj.user.username}}</td>
-          </tr>
-          <tr>
-            <th scope="row">First Name:</th>
-            <td>{{project_user_obj.user.first_name}}</td>
-          </tr>
-          <tr>
-            <th scope="row">Last Name:</th>
-            <td>{{project_user_obj.user.last_name}}</td>
-          </tr>
-          <tr>
-            <th scope="row">Email:</th>
-            <td>{{project_user_obj.user.email}}</td>
-          </tr>
-          <tr>
-            <th scope="row">Status:</th>
-            <td>{{project_user_obj.status.name}}</td>
-          </tr>
-          {% if project_user_obj.user == project_user_obj.project.pi %}
-            <tr>
-              <th scope="row">Role:</th>
-              <td>{{project_user_obj.role}}</td>
-            </tr>
-            <tr>
-              <th scope="row">Notifications Enabled:</th>
-              <td>{{project_user_obj.enable_notifications|yesno:"Yes,No"}}</td>
-            </tr>
-          {% else %}
-            <tr>
-              <th scope="row">Role:</th>
-              <td>{{project_user_update_form.role}}</td>
-            </tr>
-            {% if project_user_obj.role.name == "Manager" %}
-            <tr>
-              <th scope="row">Enable Notifications:</th>
-              <td>Notifications cannot be disabled if the user is a Manager</td>
-            </tr>
-            {% else %}
-            <tr>
-              <th scope="row">Enable Notifications:</th>
-              <td>{{project_user_update_form.enable_notifications}}</td>
-            </tr>
-            {% endif %}
-          {% endif %}
-        </table>
-      </div>
-    </div> 
-    <div class="card-footer">
-      {% if project_user_obj.user != project_user_obj.project.pi %}
-        <button type="submit" class="btn btn-primary">Update</button>
-      {% endif %}
-      <a class="btn btn-secondary" href="{% url 'project-detail' project_obj.pk %}" role="button">Back to Project</a>
-    </div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 mb-2">Project User Detail</h1>
+    <h2 class="text-xl text-gray-600">Project: {{project.title}}</h2>
+    <div class="mt-4 border-b border-gray-200"></div>
   </div>
-</form>
+
+  <form action="{% url 'project-user-detail' project_obj.pk project_user_obj.pk %}" method="post">
+    {% csrf_token %}
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">
+        <h3 class="flex items-center text-lg font-semibold text-gray-900">
+          <i class="fas fa-user mr-3 text-blue-600" aria-hidden="true"></i>
+          User Detail
+        </h3>
+      </div>
+      
+      <div class="p-6">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <tbody class="divide-y divide-gray-200">
+              <tr class="hover:bg-gray-50">
+                <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">Username:</th>
+                <td class="py-3 text-sm text-gray-700">{{project_user_obj.user.username}}</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">First Name:</th>
+                <td class="py-3 text-sm text-gray-700">{{project_user_obj.user.first_name}}</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">Last Name:</th>
+                <td class="py-3 text-sm text-gray-700">{{project_user_obj.user.last_name}}</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">Email:</th>
+                <td class="py-3 text-sm text-gray-700">{{project_user_obj.user.email}}</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">Status:</th>
+                <td class="py-3 text-sm text-gray-700">{{project_user_obj.status.name}}</td>
+              </tr>
+              {% if project_user_obj.user == project_user_obj.project.pi %}
+                <tr class="hover:bg-gray-50">
+                  <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">Role:</th>
+                  <td class="py-3 text-sm text-gray-700">{{project_user_obj.role}}</td>
+                </tr>
+                <tr class="hover:bg-gray-50">
+                  <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">Notifications Enabled:</th>
+                  <td class="py-3 text-sm text-gray-700">{{project_user_obj.enable_notifications|yesno:"Yes,No"}}</td>
+                </tr>
+              {% else %}
+                <tr class="hover:bg-gray-50">
+                  <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">Role:</th>
+                  <td class="py-3 text-sm text-gray-700">{{project_user_update_form.role}}</td>
+                </tr>
+                {% if project_user_obj.role.name == "Manager" %}
+                <tr class="hover:bg-gray-50">
+                  <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">Enable Notifications:</th>
+                  <td class="py-3 text-sm text-amber-600">Notifications cannot be disabled if the user is a Manager</td>
+                </tr>
+                {% else %}
+                <tr class="hover:bg-gray-50">
+                  <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">Enable Notifications:</th>
+                  <td class="py-3 text-sm text-gray-700">{{project_user_update_form.enable_notifications}}</td>
+                </tr>
+                {% endif %}
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-lg">
+        <div class="flex flex-col sm:flex-row gap-3">
+          {% if project_user_obj.user != project_user_obj.project.pi %}
+            <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+              Update
+            </button>
+          {% endif %}
+          <a href="{% url 'project-detail' project_obj.pk %}" role="button" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
+            Back to Project
+          </a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
 {% endblock%}
