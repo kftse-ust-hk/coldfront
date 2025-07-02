@@ -9,41 +9,58 @@ Project Attribute Details
 
 
 {% block content %}
-<h2>Project Attribute Update Form</h2>
-
-<hr>
-
-<form action="{% url 'project-attribute-update' project_obj.pk project_attribute_obj.pk %}" method="post">
-  {% csrf_token %}
-  <div class="card">
-    <div class="card-header"><i class="fas fa-edit" aria-hidden="true"></i> Attribute Details </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table">
-          <tr>
-            <th scope="row">Name:</th>
-            <td>{{project_attribute_obj}}</td>
-          </tr>
-          <tr>
-          <tr>
-            <th scope="row">Type:</th>
-            <td>{{project_attribute_obj.proj_attr_type.attribute_type}}</td>
-          </tr>
-          <tr>
-            <th scope="row">Value:</th>
-            <td>{{project_attribute_obj.value}}</td>
-          </tr>
-          <tr>
-            <th scope="row">New Value:</th>
-            <td>{{project_attribute_update_form.new_value}}</td>
-          </tr>
-        </table>
-      </div>
-    </div> 
-    <div class="card-footer">
-        <button type="submit" class="btn btn-primary">Update</button>
-      <a class="btn btn-secondary" href="{% url 'project-detail' project_obj.pk %}" role="button">Back to Project</a>
-    </div>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Project Attribute Update Form</h1>
+    <div class="mt-4 border-b border-gray-200"></div>
   </div>
-</form>
+
+  <form action="{% url 'project-attribute-update' project_obj.pk project_attribute_obj.pk %}" method="post">
+    {% csrf_token %}
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">
+        <h3 class="flex items-center text-lg font-semibold text-gray-900">
+          <i class="fas fa-edit mr-3 text-blue-600" aria-hidden="true"></i>
+          Attribute Details
+        </h3>
+      </div>
+      
+      <div class="p-6">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <tbody class="divide-y divide-gray-200">
+              <tr class="hover:bg-gray-50">
+                <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">Name:</th>
+                <td class="py-3 text-sm text-gray-700">{{project_attribute_obj}}</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">Type:</th>
+                <td class="py-3 text-sm text-gray-700">{{project_attribute_obj.proj_attr_type.attribute_type}}</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">Value:</th>
+                <td class="py-3 text-sm text-gray-700">{{project_attribute_obj.value}}</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900">New Value:</th>
+                <td class="py-3 text-sm text-gray-700">{{project_attribute_update_form.new_value}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-lg">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+            Update
+          </button>
+          <a href="{% url 'project-detail' project_obj.pk %}" role="button" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
+            Back to Project
+          </a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
 {% endblock%}
