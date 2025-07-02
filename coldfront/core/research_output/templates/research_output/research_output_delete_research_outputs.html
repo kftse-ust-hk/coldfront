@@ -9,54 +9,89 @@ Delete Research Outputs
 
 
 {% block content %}
-<h2>Delete research outputs from project: {{project.title}}</h2>
-<hr>
-{% with object_list as research_outputs %}
-  {% if research_outputs %}
-    <div class="card border-light">
-      <div class="card-body">
-        <form action="{% url 'research-output-delete-research-outputs' project.pk %}" method="post">
-          {% csrf_token %}
-          <div class="table-responsive">
-            <table class="table table-sm table-hover">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th scope="col">Research Output</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for research_output in research_outputs %}
+<div class="max-w-7xl mx-auto">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-primary-950">Delete Research Outputs</h1>
+    <div class="mt-2 h-1 w-16 bg-secondary-500 rounded"></div>
+    <p class="mt-4 text-lg text-gray-600">From project: {{project.title}}</p>
+  </div>
+
+  {% with object_list as research_outputs %}
+    {% if research_outputs %}
+      <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">Select Research Outputs to Delete</h2>
+        </div>
+        <div class="p-6">
+          <form action="{% url 'research-output-delete-research-outputs' project.pk %}" method="post">
+            {% csrf_token %}
+            <div class="overflow-x-auto">
+              <table class="w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
                   <tr>
-                    <td>
-                      <input type="checkbox" name="{{ research_output.pk }}">
-                    </td>
-                    <td title="Entered by {{ research_output.created_by }} on {{ research_output.created|date:"M. d, Y"}}">
-                      {% if research_output.title %}
-                        <strong>{{ research_output.title }}</strong>
-                      {% endif %}
-                      <div style="max-height: 120px; overflow: auto;">
-                        {{ research_output.description | linebreaks }}
-                      </div>
-                    </td>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">
+                      Select
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Research Output
+                    </th>
                   </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          <div>
-            <button type="submit" class="btn btn-danger"><i class="fas fa-minus" aria-hidden="true"></i> Delete Selected Research Outputs from Project</button>
-            <a class="btn btn-secondary" href="{% url 'project-detail' project.pk %}" role="button"><i class="fas fa-long-arrow-left" aria-hidden="true"></i> Back to Project</a>
-            <br>
-          </div>
-        </form>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  {% for research_output in research_outputs %}
+                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <input type="checkbox" name="{{ research_output.pk }}" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                      </td>
+                      <td class="px-6 py-4" title="Entered by {{ research_output.created_by }} on {{ research_output.created|date:"M. d, Y"}}">
+                        {% if research_output.title %}
+                          <div class="text-sm font-medium text-gray-900 mb-2">{{ research_output.title }}</div>
+                        {% endif %}
+                        <div class="text-sm text-gray-700 max-h-32 overflow-y-auto border border-gray-200 rounded p-3 bg-gray-50">
+                          {{ research_output.description | linebreaks }}
+                        </div>
+                        <div class="text-xs text-gray-500 mt-2">
+                          Entered by {{ research_output.created_by }} on {{ research_output.created|date:"M. d, Y"}}
+                        </div>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            <div class="flex gap-3 mt-6 pt-6 border-t border-gray-200">
+              <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
+                <i class="fas fa-minus mr-2" aria-hidden="true"></i> 
+                Delete Selected Research Outputs from Project
+              </button>
+              <a class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200" 
+                 href="{% url 'project-detail' project.pk %}" role="button">
+                <i class="fas fa-arrow-left mr-2" aria-hidden="true"></i>
+                Back to Project
+              </a>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-  {% else %}
-    <a class="btn btn-secondary mb-3" href="{% url 'project-detail' project.pk %}" role="button"><i class="fas fa-long-arrow-left" aria-hidden="true"></i> Back to project</a>
-    <div class="alert alert-info">
-      No research outputs to delete!
-    </div>
-  {% endif %}
-{% endwith %}
+    {% else %}
+      <div class="space-y-6">
+        <a class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200" 
+           href="{% url 'project-detail' project.pk %}" role="button">
+          <i class="fas fa-arrow-left mr-2" aria-hidden="true"></i> 
+          Back to Project
+        </a>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+          <div class="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-blue-100 rounded-full">
+            <i class="fas fa-info-circle text-blue-600" aria-hidden="true"></i>
+          </div>
+          <h3 class="text-lg font-medium text-blue-800 mb-2">No Research Outputs to Delete</h3>
+          <p class="text-blue-700">There are currently no research outputs that can be deleted from this project.</p>
+        </div>
+      </div>
+    {% endif %}
+  {% endwith %}
+</div>
+
+<!-- ...existing javascript... -->
 {% endblock %}

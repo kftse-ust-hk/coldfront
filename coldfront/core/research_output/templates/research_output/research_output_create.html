@@ -9,10 +9,31 @@ Create Research Output
 
 
 {% block content %}
-<form method="post">
-  {% csrf_token %}
-  {{ form|crispy }}
-  <input class="btn btn-primary" type="submit" value="Save" />
-  <a class="btn btn-secondary" href="{% url 'project-detail' project.pk %}" role="button">Cancel</a>
-</form>
+<div class="max-w-4xl mx-auto">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-primary-950">Create Research Output</h1>
+    <div class="mt-2 h-1 w-16 bg-secondary-500 rounded"></div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div class="p-6">
+      <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="flex gap-3 mt-6 pt-6 border-t border-gray-200">
+          <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200">
+            <i class="fas fa-save mr-2" aria-hidden="true"></i>
+            Save
+          </button>
+          <a class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200" 
+             href="{% url 'project-detail' project.pk %}" role="button">
+            <i class="fas fa-times mr-2" aria-hidden="true"></i>
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}
