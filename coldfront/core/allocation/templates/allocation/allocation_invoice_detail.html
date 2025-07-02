@@ -9,45 +9,69 @@ Allocation Invoice Detail
 
 
 {% block content %}
+<div class="max-w-7xl mx-auto">
 {% if allocation.project.status.name == 'Archived' %}
-  <div class="alert alert-warning" role="alert">
-    This is a allocation from an archived project! You cannot make any changes.
+  <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6" role="alert">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-yellow-800">
+          This is a allocation from an archived project! You cannot make any changes.
+        </p>
+      </div>
+    </div>
   </div>
 {% endif %}
 
-<div class="mb-3">
-  <h2>Allocation Invoice</h2>
-  <hr>
-</div>
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h2 class="text-3xl font-bold text-primary-950">Allocation Invoice</h2>
+    <div class="mt-2 h-1 w-16 bg-secondary-500 rounded"></div>
+  </div>
 
 {% if form.non_field_errors %}
-  <div class="alert alert-danger" role="alert">
-    {{ form.non_field_errors }}
+  <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6" role="alert">
+    <div class="flex">
+      <div class="flex-shrink-0">
+        <i class="fas fa-exclamation-circle text-red-400"></i>
+      </div>
+      <div class="ml-3">
+        <p class="text-sm text-red-800">
+          {{ form.non_field_errors }}
+        </p>
+      </div>
+    </div>
   </div>
 {% endif %}
 
-<div class="card mb-3">
-  <div class="card-header">
-    <h3><i class="fas fa-list" aria-hidden="true"></i> Allocation Information</h3>
+<div class="bg-white shadow-sm rounded-lg border border-gray-200 mb-6">
+  <div class="px-6 py-4 border-b border-gray-200">
+    <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+      <i class="fas fa-list text-gray-500 mr-2" aria-hidden="true"></i> 
+      Allocation Information
+    </h3>
   </div>
-  <div class="card-body">
+  <div class="p-6">
     <form method="post">
       {% csrf_token %}
-      <div class="table-responsive">
-        <table class="table table-bordered table-sm">
-          <tr>
-            <th scope="row" class="text-nowrap">Project:</th>
-            <td>
-              {% if request.user.is_superuser %}
-                <a href="{% url 'project-detail' allocation.project.pk %}">{{ allocation.project }}</a>
-              {% else %}
-                {{ allocation.project }}
-              {% endif %}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row" class="text-nowrap">Principal Investigator:</th>
-            <td>
+      <div class="overflow-x-auto">
+        <table class="w-full border border-gray-200 rounded-lg overflow-hidden">
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr>
+              <th scope="row" class="px-6 py-4 bg-gray-50 text-left text-sm font-medium text-gray-500 whitespace-nowrap w-1/3">Project:</th>
+              <td class="px-6 py-4 text-sm text-gray-900">
+                {% if request.user.is_superuser %}
+                  <a href="{% url 'project-detail' allocation.project.pk %}" class="text-primary-600 hover:text-primary-800 font-medium">{{ allocation.project }}</a>
+                {% else %}
+                  {{ allocation.project }}
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" class="px-6 py-4 bg-gray-50 text-left text-sm font-medium text-gray-500 whitespace-nowrap w-1/3">Principal Investigator:</th>
+              <td class="px-6 py-4 text-sm text-gray-900">
               {{ allocation.project.pi.first_name }} {{ allocation.project.pi.last_name }}
               ({{ allocation.project.pi.email }})
             </td>
@@ -83,56 +107,58 @@ Allocation Invoice Detail
         </table>
       </div>
       {% if request.user.is_superuser or perms.allocation.can_manage_invoice%}
-        <button type="submit" class="btn btn-success float-right"><i class="fas fa-sync" aria-hidden="true"></i> Update</button>
+        <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200 float-right"><i class="fas fa-sync mr-2" aria-hidden="true"></i> Update</button>
       {% endif %}
     </form>
   </div>
 </div>
 
 <!-- Start Admin Messages -->
-<div class="card mb-3">
-  <div class="card-header">
-    <h3 class="d-inline"><i class="fas fa-users" aria-hidden="true"></i> Notes from Staff</h3>
-    <span class="badge badge-secondary">{{allocation.allocationusernote_set.count}}</span>
+<div class="bg-white shadow rounded-lg mb-6">
+  <div class="bg-gray-50 px-6 py-3 border-b border-gray-200 rounded-t-lg">
+    <h3 class="inline-flex items-center text-lg font-medium text-gray-900"><i class="fas fa-users mr-2" aria-hidden="true"></i> Notes from Staff</h3>
+    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 ml-2">{{allocation.allocationusernote_set.count}}</span>
     <div class="float-right">
-      <a class="btn btn-success" href="{% url 'allocation-add-invoice-note' allocation.pk %}" role="button">
-        <i class="fas fa-plus" aria-hidden="true"></i> Add Note
+      <a class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200 mr-2" href="{% url 'allocation-add-invoice-note' allocation.pk %}" role="button">
+        <i class="fas fa-plus mr-1" aria-hidden="true"></i> Add Note
       </a>
-      <a class="btn btn-danger" href="{% url 'allocation-delete-invoice-note' allocation.pk %}" role="button">
-        <i class="fas fa-minus" aria-hidden="true"></i> Delete Notes
+      <a class="inline-flex items-center px-3 py-1.5 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200" href="{% url 'allocation-delete-invoice-note' allocation.pk %}" role="button">
+        <i class="fas fa-minus mr-1" aria-hidden="true"></i> Delete Notes
       </a>
     </div>
   </div>
-  <div class="card-body">
+  <div class="p-6">
     {% if allocation.allocationusernote_set.all %}
-      <div class="table-responsive">
-        <table class="table table-hover">
-          <thead>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
             <tr>
-              <th scope="col">Comment</th>
-              <th scope="col">Author</th>
-              <th scope="col">Last Modified</th>
-              <th scope="col">Actions</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comment</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Modified</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="bg-white divide-y divide-gray-200">
             {% for note in allocation.allocationusernote_set.all %}
-              <tr>
-                <td>{{ note.note }}</td>
-                <td>{{ note.author.first_name }} {{ note.author.last_name }} ({{ note.author.username }})</td>
-                <td>{{ note.modified }}</td>
-                <td><a href="{% url 'allocation-update-invoice-note' note.pk %}"><i class="fas fa-edit" aria-hidden="true"></i><span class="sr-only">Edit</span></a></td>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-900">{{ note.note }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ note.author.first_name }} {{ note.author.last_name }} ({{ note.author.username }})</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ note.modified }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><a href="{% url 'allocation-update-invoice-note' note.pk %}" class="text-primary-600 hover:text-primary-900"><i class="fas fa-edit" aria-hidden="true"></i><span class="sr-only">Edit</span></a></td>
               </tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
     {% else %}
-      <div class="alert alert-info" role="alert">
-        <i class="fa fa-info-circle" aria-hidden="true"></i> There are no messages from system administrators.
+      <div class="bg-blue-50 border border-blue-200 rounded-md p-4" role="alert">
+        <div class="flex">
+          <i class="fa fa-info-circle text-blue-400 mt-0.5 mr-3" aria-hidden="true"></i>
+          <div class="text-sm text-blue-700">There are no messages from system administrators.</div>
+        </div>
       </div>
     {% endif %}
   </div>
 </div>
 {% endblock %}
-

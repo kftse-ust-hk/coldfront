@@ -16,7 +16,7 @@ Update Allocation Invoice Note
 <form method="post">
   {% csrf_token %}
   {{ form|crispy }}
-  <input class="btn btn-success" type="submit" value="Update">
-  <a class="btn btn-secondary" href="{% url 'allocation-invoice-detail' object.allocation.pk %}" role="button">Cancel</a>
+  <input class="inline-flex items-center px-4 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200" type="submit" value="Update">
+  <a class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200" href="{% url 'allocation-invoice-detail' object.allocation.pk %}" role="button">Cancel</a>
 </form>
 {% endblock %}
