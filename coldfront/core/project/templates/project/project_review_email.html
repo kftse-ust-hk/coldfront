@@ -9,54 +9,76 @@ Email User
 
 
 {% block content %}
-<h2>Email</h2>
-<hr>
-
-<div class="card mb-3">
-  <div class="card-header">
-    <h3><i class="fas fa-list" aria-hidden="true"></i> Project Review Information</h3>
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Email</h1>
+    <div class="mt-4 border-b border-gray-200"></div>
   </div>
-  <div class="card-body">
-    <div class="table-responsive">
-      <table class="table">
-        <tr>
-          <th scope="row" class="text-nowrap">Project:</th>
-          <td><a href="{% url 'project-detail' project_review.project.pk %}">{{ project_review.project }}</a></td>
-        </tr>
-        <tr>
-          <th scope="row" class="text-nowrap">PI:</th>
-          <td>{{project_review.project.pi.first_name}} {{project_review.project.pi.last_name}} ({{project_review.project.pi.username}})</td>
-        </tr>
-        <tr>
-          <th scope="row" class="text-nowrap">Reason for not Updating Project</th>
-          <td>{{ project_review.reason_for_not_updating_project}}</td>
-        </tr>
-        <tr>
-          <th scope="row" class="text-nowrap">Date Review Submitted:</th>
-          <td>{{ project_review.created|date:"M-d-Y" }}</td>
-        </tr>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 rounded-t-lg">
+      <h3 class="flex items-center text-lg font-semibold text-gray-900">
+        <i class="fas fa-list mr-3 text-blue-600" aria-hidden="true"></i>
+        Project Review Information
+      </h3>
+    </div>
+    
+    <div class="p-6">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <tbody class="divide-y divide-gray-200">
+            <tr class="hover:bg-gray-50">
+              <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900 whitespace-nowrap">Project:</th>
+              <td class="py-3 text-sm text-gray-700">
+                <a href="{% url 'project-detail' project_review.project.pk %}" class="text-blue-600 hover:text-blue-800 font-medium">
+                  {{ project_review.project }}
+                </a>
+              </td>
+            </tr>
+            <tr class="hover:bg-gray-50">
+              <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900 whitespace-nowrap">PI:</th>
+              <td class="py-3 text-sm text-gray-700">{{project_review.project.pi.first_name}} {{project_review.project.pi.last_name}} ({{project_review.project.pi.username}})</td>
+            </tr>
+            <tr class="hover:bg-gray-50">
+              <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900 whitespace-nowrap">Reason for not Updating Project</th>
+              <td class="py-3 text-sm text-gray-700">{{ project_review.reason_for_not_updating_project}}</td>
+            </tr>
+            <tr class="hover:bg-gray-50">
+              <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900 whitespace-nowrap">Date Review Submitted:</th>
+              <td class="py-3 text-sm text-gray-700">{{ project_review.created|date:"M-d-Y" }}</td>
+            </tr>
 {% if settings.GRANT_ENABLE %}
-        <tr>
-          <th scope="row" class="text-nowrap">Grants Last Updated:</th>
-          <td>{{project_review.project.latest_grant.modified|date:"M-d-Y"|default:"No grants"}}</td>
-        </tr>
+            <tr class="hover:bg-gray-50">
+              <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900 whitespace-nowrap">Grants Last Updated:</th>
+              <td class="py-3 text-sm text-gray-700">{{project_review.project.latest_grant.modified|date:"M-d-Y"|default:"No grants"}}</td>
+            </tr>
 {% endif %}
 {% if settings.PUBLICATION_ENABLE %}
-        <tr>
-          <th scope="row" class="text-nowrap">Publications Last Updated:</th>
-          <td>{{project_review.project.latest_publication.created|date:"M-d-Y"|default:"No publications"}}</td>
-        </tr>
+            <tr class="hover:bg-gray-50">
+              <th scope="row" class="py-3 pr-6 text-left text-sm font-semibold text-gray-900 whitespace-nowrap">Publications Last Updated:</th>
+              <td class="py-3 text-sm text-gray-700">{{project_review.project.latest_publication.created|date:"M-d-Y"|default:"No publications"}}</td>
+            </tr>
 {% endif %}
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
+
+  <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <form method="post">
+      {% csrf_token %}
+      {{form|crispy}}
+      
+      <div class="mt-8 flex flex-col sm:flex-row gap-3">
+        <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+          Email
+        </button>
+        <a href="{% url 'project-review-list' %}" role="button" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
+          Cancel
+        </a>
+      </div>
+    </form>
+  </div>
 </div>
-
-
-<form method="post">
-    {% csrf_token %}
-    {{form|crispy}}
-    <input class="btn btn-primary" type="submit" value="Email" />
-    <a class="btn btn-secondary" href="{% url 'project-review-list' %}" role="button">Cancel</a>
-</form>
 {% endblock %}
