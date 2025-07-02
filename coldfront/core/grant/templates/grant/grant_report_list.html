@@ -10,59 +10,81 @@ Grants Report
 
 
 {% block content %}
-<!-- Start Project Grants -->
-<div class="card">
-  <div class="card-header">
-    <h4 class="d-inline"><i class="fas fa-trophy" aria-hidden="true"></i> Grants</h4>
-    <button type="submit" form="download_form" class="btn btn-success float-right"><i class="fas fa-download" aria-hidden="true"></i> Export to CSV</button>
+<div class="max-w-7xl mx-auto">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-primary-950">Grants Report</h1>
+    <div class="mt-2 h-1 w-16 bg-secondary-500 rounded"></div>
   </div>
-  <div class="card-body">
-    {% if formset %}
-    <form id="download_form" action="{% url 'grant-report' %}" method="post">
-      {% csrf_token %}
-      <div class="table-responsive">
-        <table id="grants-table" class="table table-hover table-sm">
-          <thead>
-            <tr>
-              <th scope="col"><input type="checkbox" class="check" id="selectAll"></th>
-              <th scope="col">Grant Title</th>
-              <th scope="col">Project PI</th>
-              <th scope="col">Faculty Role</th>
-              <th scope="col">Grant PI</th>
-              <th scope="col">Total Amount Awarded</th>
-              <th scope="col">Funding Agency</th>
-              <th scope="col">Grant Number</th>
-              <th scope="col">Start Date</th>
-              <th scope="col">End Date</th>
-              <th scope="col">Percent Credit</th>
-              <th scope="col">Direct Funding</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for form in formset %}
-              <tr>
-                <td>{{ form.selected }}</td>
-                <td style="min-width: 400px">{{ form.title.value }}</td>
-                <td class="text-nowrap"><a href="{% url 'project-detail' form.project_pk.value %}">{{ form.pi_first_name.value }} {{ form.pi_last_name.value }}</a></td>
-                <td class="text-nowrap">{{ form.role.value }}</td>
-                <td class="text-nowrap">{{ form.grant_pi.value }}</td>
-                <td class="text-nowrap">{{ form.total_amount_awarded.value|floatformat:2|intcomma }}</td>
-                <td class="text-nowrap">{{ form.funding_agency.value }}</td>
-                <td class="text-nowrap">{{ form.grant_number.value }}</td>
-                <td class="text-nowrap">{{ form.grant_start.value|date:"M. d, Y" }}</td>
-                <td class="text-nowrap">{{ form.grant_end.value|date:"M. d, Y" }}</td>
-                <td>{{ form.percent_credit.value|floatformat:2|intcomma }}</td>
-                <td>{{ form.direct_funding.value|floatformat:2|intcomma }}</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+
+  <!-- Start Project Grants -->
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+          <i class="fas fa-trophy text-primary-600 mr-3" aria-hidden="true"></i> 
+          Grants
+        </h3>
+        <button type="submit" form="download_form" class="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+          <i class="fas fa-download mr-2" aria-hidden="true"></i> Export to CSV
+        </button>
       </div>
-      {{ formset.management_form }}
-    </form>
-    {% else %}
-      <div class="alert alert-info" role="alert"><i class="fas fa-info-circle" aria-hidden="true"></i> There are no grants to display.</div>
-    {% endif %}
+    </div>
+    <div class="p-6">
+      {% if formset %}
+      <form id="download_form" action="{% url 'grant-report' %}" method="post">
+        {% csrf_token %}
+        <div class="overflow-x-auto">
+          <table id="grants-table" class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"><input type="checkbox" class="check" id="selectAll"></th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grant Title</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project PI</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Faculty Role</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grant PI</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount Awarded</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Funding Agency</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grant Number</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End Date</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Percent Credit</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Direct Funding</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              {% for form in formset %}
+                <tr class="hover:bg-gray-50">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ form.selected }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900" style="min-width: 400px">{{ form.title.value }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <a href="{% url 'project-detail' form.project_pk.value %}" class="text-primary-600 hover:text-primary-900">{{ form.pi_first_name.value }} {{ form.pi_last_name.value }}</a>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ form.role.value }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ form.grant_pi.value }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ form.total_amount_awarded.value|floatformat:2|intcomma }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ form.funding_agency.value }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ form.grant_number.value }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ form.grant_start.value|date:"M. d, Y" }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ form.grant_end.value|date:"M. d, Y" }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ form.percent_credit.value|floatformat:2|intcomma }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ form.direct_funding.value|floatformat:2|intcomma }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {{ formset.management_form }}
+      </form>
+      {% else %}
+        <div class="bg-blue-50 border border-blue-200 rounded-md p-4" role="alert">
+          <div class="flex">
+            <i class="fas fa-info-circle text-blue-400 mt-0.5 mr-3" aria-hidden="true"></i>
+            <div class="text-sm text-blue-700">There are no grants to display.</div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
   </div>
 </div>
 <!-- End Project Grants -->
