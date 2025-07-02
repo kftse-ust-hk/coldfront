@@ -10,55 +10,136 @@ Review Project
 
 
 {% block content %}
-<h2>Reviewing Project: {{project.title}}</h2>
-<hr>
+<div class="max-w-4xl mx-auto">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-primary-950">Review Project</h1>
+    <div class="mt-2 h-1 w-16 bg-secondary-500 rounded"></div>
+    <p class="mt-4 text-lg text-gray-600">{{project.title}}</p>
+  </div>
 
-<div class="card-body">
-  <p class="text-justify">{% settings_value 'CENTER_NAME' %} requires faculty to review their project information annually in order to renew their group’s accounts. The information provided by researchers is compiled and used to help make the case to the University for continued investment in {% settings_value 'CENTER_NAME' %}. Up-to-date and accurate information is crucial to our success. <a href="mailto:{% settings_value 'EMAIL_PROJECT_REVIEW_CONTACT' %}">Questions? Contact us</a></p>
+  <div class="space-y-6">
+    <!-- Information Card -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+      <div class="p-6">
+        <p class="text-gray-700 mb-4">
+          {% settings_value 'CENTER_NAME' %} requires faculty to review their project information annually in order to renew their group's accounts. The information provided by researchers is compiled and used to help make the case to the University for continued investment in {% settings_value 'CENTER_NAME' %}. Up-to-date and accurate information is crucial to our success. 
+          <a href="mailto:{% settings_value 'EMAIL_PROJECT_REVIEW_CONTACT' %}" class="text-primary-600 hover:text-primary-800 underline">Questions? Contact us</a>
+        </p>
 
-  <p class="text-justify">Please update the following information:</p>
+        <p class="text-gray-700 mb-6">Please update the following information:</p>
 
-  <ol>
-    <li><a href="{% url 'project-detail' project.pk %}"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Verify</a> your project description is accurate</li>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <ol class="space-y-3 text-sm">
+            <li class="flex items-start">
+              <span class="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center text-xs font-medium mr-3">1</span>
+              <div>
+                <a href="{% url 'project-detail' project.pk %}" class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium">
+                  <i class="fas fa-external-link-alt mr-2" aria-hidden="true"></i> 
+                  Verify your project description is accurate
+                </a>
+              </div>
+            </li>
 
-{% if settings.PUBLICATION_ENABLE %}
-    <li><a href="{% url 'project-detail' project.pk %}#publications"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Add</a> Publications</li>
-{% endif %}
-{% if settings.GRANT_ENABLE %}
-    <li><a href="{% url 'project-detail' project.pk %}#grants"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Add</a> Grants</li>
-{% endif %}
-{% if settings.RESEARCH_OUTPUT_ENABLE %}
-    <li><a href="{% url 'project-detail' project.pk %}#users"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Verify</a> the user accounts in your group and remove any that should no longer have access to {% settings_value 'CENTER_NAME' %} resources</li>
-{% endif %}
-  </ol>
+            {% if settings.PUBLICATION_ENABLE %}
+            <li class="flex items-start">
+              <span class="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center text-xs font-medium mr-3">2</span>
+              <div>
+                <a href="{% url 'project-detail' project.pk %}#publications" class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium">
+                  <i class="fas fa-external-link-alt mr-2" aria-hidden="true"></i> 
+                  Add Publications
+                </a>
+              </div>
+            </li>
+            {% endif %}
 
-  <div class="table-responsive">
-    <table class="table table-bordered table-sm">
-{% if settings.GRANT_ENABLE %}
-      <tr>
-        <th scope="row" class="text-nowrap">Grants Last Updated:</th>
-        <td>{{project.latest_grant.modified|date:"M. d, Y"|default:"No grants"}}</td>
-      </tr>
-{% endif %}
-{% if settings.PUBLICATION_ENABLE %}
-      <tr>
-        <th scope="row" class="text-nowrap">Publications Last Updated:</th>
-        <td>{{project.latest_publication.created|date:"M. d, Y"|default:"No publications"}}</td>
-      </tr>
-{% endif %}
-      <tr>
-        <th scope="row" class="text-nowrap">Users in project:</th>
-        <td>{{project_users}}</td>
-      </tr>
-    </table>
+            {% if settings.GRANT_ENABLE %}
+            <li class="flex items-start">
+              <span class="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center text-xs font-medium mr-3">3</span>
+              <div>
+                <a href="{% url 'project-detail' project.pk %}#grants" class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium">
+                  <i class="fas fa-external-link-alt mr-2" aria-hidden="true"></i> 
+                  Add Grants
+                </a>
+              </div>
+            </li>
+            {% endif %}
+
+            {% if settings.RESEARCH_OUTPUT_ENABLE %}
+            <li class="flex items-start">
+              <span class="flex-shrink-0 w-6 h-6 bg-primary-600 text-white rounded-full flex items-center justify-center text-xs font-medium mr-3">4</span>
+              <div>
+                <a href="{% url 'project-detail' project.pk %}#users" class="inline-flex items-center text-primary-600 hover:text-primary-800 font-medium">
+                  <i class="fas fa-external-link-alt mr-2" aria-hidden="true"></i> 
+                  Verify the user accounts in your group and remove any that should no longer have access to {% settings_value 'CENTER_NAME' %} resources
+                </a>
+              </div>
+            </li>
+            {% endif %}
+          </ol>
+        </div>
+
+        <!-- Status Table -->
+        <div class="mt-6">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">Project Status</h3>
+          <div class="overflow-hidden border border-gray-200 rounded-lg">
+            <table class="w-full divide-y divide-gray-200">
+              <tbody class="bg-white divide-y divide-gray-200">
+                {% if settings.GRANT_ENABLE %}
+                <tr>
+                  <th scope="row" class="px-6 py-4 text-left text-sm font-medium text-gray-900 bg-gray-50 whitespace-nowrap">
+                    Grants Last Updated:
+                  </th>
+                  <td class="px-6 py-4 text-sm text-gray-900">
+                    {{project.latest_grant.modified|date:"M. d, Y"|default:"No grants"}}
+                  </td>
+                </tr>
+                {% endif %}
+                {% if settings.PUBLICATION_ENABLE %}
+                <tr>
+                  <th scope="row" class="px-6 py-4 text-left text-sm font-medium text-gray-900 bg-gray-50 whitespace-nowrap">
+                    Publications Last Updated:
+                  </th>
+                  <td class="px-6 py-4 text-sm text-gray-900">
+                    {{project.latest_publication.created|date:"M. d, Y"|default:"No publications"}}
+                  </td>
+                </tr>
+                {% endif %}
+                <tr>
+                  <th scope="row" class="px-6 py-4 text-left text-sm font-medium text-gray-900 bg-gray-50 whitespace-nowrap">
+                    Users in project:
+                  </th>
+                  <td class="px-6 py-4 text-sm text-gray-900">
+                    {{project_users}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review Form -->
+    <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+      <div class="p-6">
+        <form method="post">
+          {% csrf_token %}
+          {{project_review_form|crispy}}
+          <div class="flex gap-3 mt-6 pt-6 border-t border-gray-200">
+            <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200">
+              <i class="fas fa-check mr-2" aria-hidden="true"></i>
+              Submit
+            </button>
+            <a class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200" 
+               href="{% url 'project-detail' project.pk %}" role="button">
+              <i class="fas fa-arrow-left mr-2" aria-hidden="true"></i>
+              Back to Project
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
-
-
-<form method="post">
-  {% csrf_token %}
-  {{project_review_form|crispy}}
-  <input class="btn btn-primary" type="submit" value="Submit" />
-  <a class="btn btn-secondary" href="{% url 'project-detail' project.pk %}" role="button">Back to Project</a>
-</form>
 {% endblock %}

@@ -1,19 +1,19 @@
 {% load common_tags %}
-<div class="table-responsive">
-  <table id="fos-table" class="table table-bordered">
-    <thead>
+<div class="overflow-x-auto">
+  <table id="fos-table" class="min-w-full divide-y divide-gray-200">
+    <thead class="bg-gray-50">
       <tr>
-        <th scope="col">Field of Science</th>
-        <th scope="col">Active Allocation Count</th>
-        <th scope="col">User Count</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Field of Science</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Active Allocation Count</th>
+        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User Count</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="bg-white divide-y divide-gray-200">
       {% for key, val in allocations_by_fos.items %}
-        <tr>
-          <td>{{key}}</td>
-          <td>{{val}}</td>
-          <td>{{active_users_by_fos|get_value_from_dict:key}}</td>
+        <tr class="hover:bg-gray-50">
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{key}}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{val}}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{active_users_by_fos|get_value_from_dict:key}}</td>
         </tr>
       {% endfor %}
     </tbody>

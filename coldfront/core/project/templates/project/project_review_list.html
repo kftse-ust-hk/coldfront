@@ -10,53 +10,77 @@ Project Review List
 
 
 {% block content %}
-<h2>Pending Project Reviews</h2>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Pending Project Reviews</h1>
+    <div class="mt-4 border-b border-gray-200"></div>
+  </div>
 
-{% if project_review_list %}
-  <div class="table-responsive">
-    <table class="table table-sm">
-      <thead>
-        <tr>
-          <th scope="col">Project Title</th>
-          <th scope="col">Date Review Submitted</th>
-          <th scope="col">PI</th>
+  {% if project_review_list %}
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project Title</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date Review Submitted</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PI</th>
 {% if settings.GRANT_ENABLE %}
-          <th scope="col">Grants Last Updated</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grants Last Updated</th>
 {% endif %}
 {% if settings.PUBLICATION_ENABLE %}
-          <th scope="col">Publications Last Updated</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Publications Last Updated</th>
 {% endif %}
-          <th scope="col">Reason for not Updating Project</th>
-          <th scope="col">Project Review Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for project_review in project_review_list %}
-          <tr>
-            <td><a href="{% url 'project-detail' project_review.project.pk %}">{{project_review.project.title|truncatechars:50}}</a></td>
-            <td >{{ project_review.created|date:"M. d, Y" }}</td>        
-            <td>{{project_review.project.pi.first_name}} {{project_review.project.pi.last_name}} ({{project_review.project.pi.username}})</td>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reason for not Updating Project</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project Review Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {% for project_review in project_review_list %}
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <a href="{% url 'project-detail' project_review.project.pk %}" class="text-blue-600 hover:text-blue-900 font-medium">
+                    {{project_review.project.title|truncatechars:50}}
+                  </a>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ project_review.created|date:"M. d, Y" }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{project_review.project.pi.first_name}} {{project_review.project.pi.last_name}} ({{project_review.project.pi.username}})</td>
 {% if settings.GRANT_ENABLE %}
-            <td >{{ project_review.project.latest_grant.modified|date:"M. d, Y"|default:"No grants" }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ project_review.project.latest_grant.modified|date:"M. d, Y"|default:"No grants" }}</td>
 {% endif %}
 {% if settings.PUBLICATION_ENABLE %}
-            <td >{{ project_review.project.latest_publication.created|date:"M. d, Y"|default:"No publications" }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ project_review.project.latest_publication.created|date:"M. d, Y"|default:"No publications" }}</td>
 {% endif %}
-            <td >{{ project_review.reason_for_not_updating_project}}</td>
-            <td class="text-nowrap">
-              <a href="{% url 'project-review-complete' project_review.pk %}" class="btn btn-success mr-1">Mark Complete</a>
-              <a href="{% url 'project-review-email' project_review.pk %}" class="btn btn-info mr-1">Email</a>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-{% else %}
-  <div class="alert alert-info">
-    No pending project reviews!
-  </div>
-{% endif %}
+                <td class="px-6 py-4 text-sm text-gray-700">{{ project_review.reason_for_not_updating_project}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                  <div class="flex gap-2">
+                    <a href="{% url 'project-review-complete' project_review.pk %}" class="inline-flex items-center px-3 py-1 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors">
+                      Mark Complete
+                    </a>
+                    <a href="{% url 'project-review-email' project_review.pk %}" class="inline-flex items-center px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                      Email
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% else %}
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <i class="fas fa-info-circle text-blue-400 text-xl"></i>
+        </div>
+        <div class="ml-3">
+          <p class="text-blue-800 font-medium">No pending project reviews!</p>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
 
 <script>
   $("#navbar-main > ul > li.active").removeClass("active");

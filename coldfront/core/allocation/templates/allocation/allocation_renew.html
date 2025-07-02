@@ -9,60 +9,65 @@ Renew Allocation
 
 
 {% block content %}
-<h2>Renew allocation to {{allocation.get_parent_resource }} for project: {{allocation.project.title}}</h2>
-<hr>
+<div class="max-w-7xl mx-auto">
+  <!-- Page Title -->
+  <div class="mb-8">
+    <h2 class="text-3xl font-bold text-primary-950">Renew allocation to {{allocation.get_parent_resource }}</h2>
+    <div class="mt-2 h-1 w-16 bg-secondary-500 rounded"></div>
+    <p class="mt-4 text-lg text-gray-600">Project: {{allocation.project.title}}</p>
+  </div>
 
-<div class="card border-light">
-  <div class="card-body">
-    <form action="{% url 'allocation-renew' allocation.pk %}" method="post">
-      {% csrf_token %}
+  <div class="bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div class="p-6">
+      <form action="{% url 'allocation-renew' allocation.pk %}" method="post">
+        {% csrf_token %}
 
-      {{ formset.management_form }}
+        {{ formset.management_form }}
 
-      {% if formset %}
-        <div class="table-responsive">
-          <table class="table table-sm">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Username</th>
-                <th scope="col">First Name</th>
-                <th scope="col">Last Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">User Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for form in formset %}
+        {% if formset %}
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
                 <tr>
-                  <td>{{ forloop.counter }}</td>
-                  <td>{{ form.username.value }}</td>
-                  <td>{{ form.first_name.value }}</td>
-                  <td>{{ form.last_name.value }}</td>
-                  <td>{{ form.email.value }}</td>
-                  <td>{{ form.user_status }}</td>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">First Name</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Name</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                  <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User Status</th>
                 </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      {% else %}
-        <div class="table-responsive">
-          <table class="table table-sm">
-            <thead>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                {% for form in formset %}
+                  <tr class="hover:bg-gray-50 transition-colors duration-150">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ forloop.counter }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-600">{{ form.username.value }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ form.first_name.value }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ form.last_name.value }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ form.email.value }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ form.user_status }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
               <tr>
-                <th scope="col">Username</th>
-                <th scope="col">First Name</th>
-                <th scope="col">Last Name</th>
-                <th scope="col">Email</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">First Name</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Name</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="bg-white divide-y divide-gray-200">
               <tr>
-                <td>{{ allocation.project.pi.username }}</td>
-                <td>{{ allocation.project.pi.first_name }}</td>
-                <td>{{ allocation.project.pi.last_name }}</td>
-                <td>{{ allocation.project.pi.email }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ allocation.project.pi.username }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ allocation.project.pi.first_name }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ allocation.project.pi.last_name }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ allocation.project.pi.email }}</td>
               </tr>
             </tbody>
           </table>
@@ -73,20 +78,23 @@ Renew Allocation
         <hr>
       {% endif %}
 
-      <div id="eula-div" style="display: none;">
-        <textarea style="display:none;min-width:100%" id="eula"  rows="15">
+      <div id="eula-div" class="hidden">
+        <textarea class="hidden w-full min-h-96 p-4 border border-gray-300 rounded-lg" id="eula" rows="15">
         </textarea>
         <br>
-        <p class="font-weight-bold">By clicking submit you agree to the Terms and Conditions.</p>
+        <p class="font-semibold text-gray-900 mt-4">By clicking submit you agree to the Terms and Conditions.</p>
       </div>
-      <div class="mb-3">
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <a class="btn btn-secondary" href="{% url 'allocation-detail' allocation.pk %}" role="button">
-          <i class="fas fa-long-arrow-left" aria-hidden="true"></i> Back to Allocation
+      <div class="flex gap-3 mt-6 pt-6 border-t border-gray-200">
+        <button type="submit" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200">
+          Submit
+        </button>
+        <a href="{% url 'allocation-detail' allocation.pk %}" class="inline-flex items-center px-4 py-2 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
+          <i class="fas fa-long-arrow-left mr-2" aria-hidden="true"></i> Back to Allocation
         </a>
       </div>
     </form>
   </div>
+</div>
 </div>
 
 <script>
@@ -95,8 +103,8 @@ Renew Allocation
   $(document).ready(function () {
     if (resource_eula['eula']) {
       $('#eula').text(resource_eula['eula'])
-      $('#eula-div').show();
-      $('#eula').show();
+      $('#eula-div').removeClass('hidden').show();
+      $('#eula').removeClass('hidden').show();
     }
 
     $("#selectAll").click(function () {

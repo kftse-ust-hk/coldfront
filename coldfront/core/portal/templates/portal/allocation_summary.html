@@ -1,23 +1,23 @@
 {% load static %}
-<div class="row">
-  <div class="col">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div>
     <div id="chartAllocations" style="min-height: 270px;"></div>
     <div id="chartResources" style="min-height: 270px;"></div>
   </div>
-  <div class="col">
-    <div class="table-responsive">
-      <table id="resource-table" class="table table-bordered table-condensed table-hover">
-        <thead>
+  <div>
+    <div class="overflow-x-auto">
+      <table id="resource-table" class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
           <tr>
-            <th scope="col">Resource Name (Type)</th>
-            <th scope="col">Active Allocation Count</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resource Name (Type)</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Active Allocation Count</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="bg-white divide-y divide-gray-200">
           {% for resource, resource_allocation_count in allocations_count_by_resource.items %}
-            <tr>
-              <td>{{resource.name}} <strong>({{resource.resource_type.name}})</strong></td>
-              <td>{{resource_allocation_count}}</td>
+            <tr class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{resource.name}} <strong>({{resource.resource_type.name}})</strong></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{resource_allocation_count}}</td>
             </tr>
           {% endfor %}
         </tbody>
